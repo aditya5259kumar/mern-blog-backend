@@ -4,15 +4,22 @@ import { Editor } from "primereact/editor";
 const CreateBlog = () => {
   return (
     <div className="py-20 container px-8 md:px-20 mx-auto">
-      <h1 className="text-center text-5xl font-bold mb-10">Cretae Blog</h1>
-      <p className="text-center mb-20 lg:px-20 md:px-10">
-        Lorem ipsum dolor , maxime voluptates tempora? Culpa architecto saepe
-        voluptatibus provident eius rem. Optio quaerat aliquam placeat eveniet
-        molestiae, id ut quidem eligendi eum soluta modi, maiores rem illum
-        earum dolorem ratione maxime perferendis neque, labore voluptate
-        suscipit libero quam.
+      <h1 className="text-6xl text-gray-800 font-semibold text-center mb-6">
+        Create Blogs
+      </h1>
+      <p className="text-gray-700 text-center px-4 md:px-6 lg:px-20 mb-15">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
+        exercitationem porro? Ipsam debitis laboriosam quas, sint eveniet
+        dignissimos alias at perferendis facere placeat quisquam?
       </p>
       <div className="">
+        <div className="border ">
+          <input
+            type="text"
+            placeholder="Blog Title"
+            className="full border focus:focus-within:none"
+          />
+        </div>
         <Editor
           value=""
           onTextChange=""
