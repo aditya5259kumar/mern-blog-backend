@@ -6,13 +6,13 @@ import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 const Footer = () => {
   return (
     <footer className="bg-gray-900">
-      <div className="container mx-auto px-8">
+      <div className="container px-8 md:px-20">
         <div className="grid grid-rows-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:pb-4 pt-8 text-white">
           <div className="">
             <div className="overflow-hidden cursor-pointer invert">
               <img src={black_beog_logo} alt="beog-logo" className="h-10" />
             </div>
-            <p className="text-sm w-70 my-6 leading-7">
+            <p className="text-sm lg:pr-15 md:pr-0 my-6 leading-7">
               Lorem Ipsum is simply dummy text the printing and typesetting
               industry has been the industry's standard text ever since.
             </p>

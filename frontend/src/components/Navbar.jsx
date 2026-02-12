@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
-import { HiOutlineSearch, HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
+import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
 import { navMenu } from "../data/data";
 import { Link } from "react-router";
 
@@ -13,8 +13,8 @@ const Navbar = () => {
 
   return (
     <>
-      <navbar className="">
-        <div className="container px-8 py-4 mx-auto">
+      <header className="shadow-lg">
+        <div className="container px-8 md:px-20 py-4 mx-auto">
           <div className=" flex items-center justify-between">
             <div className="overflow-hidden relative z-10 cursor-pointer">
               <img src={black_beog_logo} alt="beog-logo" className="h-10" />
@@ -34,15 +34,15 @@ const Navbar = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-8">
-              <div>
-                <HiOutlineSearch className="text-3xl cursor-pointer" />
-              </div>
+              <button className="bg-gray-800 rounded-md px-6 py-2 text-white font-medium">
+                <span>Contact Us</span>
+              </button>
 
               <div
                 onClick={handleSideBar}
                 className="p-2 block md:hidden bg-black text-white rounded-lg cursor-pointer"
               >
-                <HiOutlineMenuAlt4 className="text-3xl " />
+                <HiOutlineMenuAlt4 className="text-2xl " />
               </div>
             </div>
           </div>
@@ -73,7 +73,7 @@ const Navbar = () => {
             </nav>
           </div>
         )}
-      </navbar>
+      </header>
     </>
   );
 };
