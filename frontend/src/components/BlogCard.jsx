@@ -6,7 +6,11 @@ const BlogCard = () => {
   return (
     <div className="w-full rounded-2xl">
       <div className="overflow-hidden rounded-lg">
-        <img src={blogCard} alt="" className="w-full aspect-video h-full object-cover" />
+        <img
+          src={blogCard}
+          alt=""
+          className="w-full aspect-video h-full object-cover"
+        />
       </div>
       <div className="">
         <div className="flex items-center space-x-6 my-5">

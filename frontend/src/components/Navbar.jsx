@@ -34,7 +34,7 @@ const Navbar = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-8">
-              <button className="bg-gray-800 rounded-md px-6 py-2 text-white font-medium">
+              <button className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium">
                 <span>Contact Us</span>
               </button>
 
@@ -49,9 +49,7 @@ const Navbar = () => {
         </div>
 
         {sideBar && (
-          <div
-            className={`min-h-screen min-w-8/12 z-8 shadow-xl bg-gray-200 absolute top-0 left-0 px-4 py-2 flex flex-col gap-20 items-center`}
-          >
+          <div className="min-h-screen min-w-8/12 z-8 shadow-xl bg-gray-200 absolute top-0 left-0 px-4 py-2 flex flex-col gap-15 items-center">
             <span className="flex justify-end w-full text-3xl py-4">
               <HiOutlineX
                 onClick={handleSideBar}
@@ -71,6 +69,9 @@ const Navbar = () => {
                 </Link>
               ))}
             </nav>
+            <button className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium">
+              <span>Contact Us</span>
+            </button>
           </div>
         )}
       </header>

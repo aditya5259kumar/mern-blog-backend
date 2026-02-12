@@ -5,9 +5,13 @@ import cookieParser from "cookie-parser";
 import createError from "http-errors";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import blogRoutes from "./routes/blogRoutes.js";
+
+import authentiateUser from "./middleware/authenticateUser.js";
 
 const app = express();
 dotenv.config();
@@ -20,6 +24,14 @@ const __dirname = path.dirname(__filename);
   await connectDB();
 })();
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    method: ["PUT", "POST", "GET", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -31,6 +43,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", userRoutes);
+app.use(authentiateUser);
+app.use("/api", blogRoutes);
 
 app.get("/", (req, res) => {
   res.render("index", { msg: "hey from express" });

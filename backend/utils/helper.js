@@ -6,7 +6,7 @@ const helper = {
       data: data,
     });
   },
-  error: (res, message, error, statusCode = 200) => {
+  error: (res, message, error, statusCode = 400) => {
     return res.status(statusCode).json({
       success: false,
       message: message,
