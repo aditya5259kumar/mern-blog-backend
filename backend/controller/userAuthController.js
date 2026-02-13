@@ -9,7 +9,7 @@ const userAuth = {
     try {
       const { name, userName, email, password, bio, profilePhoto } = req.body;
 
-      if (!name || !userName || !email || !password) {
+      if (!userName || !email || !password) {
         helper.error(res, "all fields are required!");
       }
 
