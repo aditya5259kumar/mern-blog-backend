@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
-import { navMenu } from "../data/data";
+import { NAVBMENU } from "../data/data";
 import { Link } from "react-router";
 
 const Navbar = () => {
@@ -21,7 +21,7 @@ const Navbar = () => {
             </div>
 
             <nav className="hidden md:flex font-medium gap-8 items-center justify-center">
-              {navMenu.map((value, index) => (
+              {NAVBMENU.map((value, index) => (
                 <Link
                   key={index}
                   to={value.href}
@@ -58,7 +58,7 @@ const Navbar = () => {
             </span>
 
             <nav className="flex flex-col font-semibold gap-8 items-center justify-center">
-              {navMenu.map((value, index) => (
+              {NAVBMENU.map((value, index) => (
                 <Link
                   key={index}
                   to={value.href}

@@ -37,7 +37,7 @@ const authValidator = {
   validate: (req, res, next) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-     return helper.error(res, "", error.array());
+      return helper.error(res, "", error.array());
     }
     next();
   },

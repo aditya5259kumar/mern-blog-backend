@@ -23,9 +23,12 @@ const Login = () => {
     e.preventDefault();
 
     const newError = {};
+    const emailRegex = /^[a-zA-Z][^\s@]*@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.email) {
       newError.email = "email is required!";
+    } else if (!emailRegex.test(formData.email)) {
+      newError.email = "invalid email address!";
     }
 
     if (!formData.password) {

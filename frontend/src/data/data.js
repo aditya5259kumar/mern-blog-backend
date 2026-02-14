@@ -1,4 +1,4 @@
-export const navMenu = [
+export const NAVBMENU = [
   {
     name: "Home",
     href: "/",
@@ -19,4 +19,27 @@ export const navMenu = [
     name: "Contacts",
     href: "/",
   },
+];
+
+export const AVAILABLE_CATEGORIES = [
+  "Technology",
+  "Lifestyle",
+  "Travel",
+  "Food",
+  "Health",
+  "Business",
+  "Finance",
+  "Education",
+  "Entertainment",
+  "Sports",
+  "Science",
+  "Fashion",
+  "Art",
+  "Music",
+  "Photography",
+  "Gaming",
+  "Politics",
+  "Environment",
+  "Culture",
+  "Personal Development",
 ];
