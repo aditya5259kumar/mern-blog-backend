@@ -15,4 +15,7 @@ router.get("/my-blogs", blogController.myBlogs);
 // delete blog
 router.delete("/delete-blog/:id", blogController.deleteBlog);
 
+// update blog
+router.put("/update-blog/:id", blogController.updateBlog);
+
 export default router;

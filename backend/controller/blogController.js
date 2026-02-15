@@ -27,7 +27,7 @@ const blog = {
   createBlog: async (req, res) => {
     try {
       const id = req.user.id;
-      const { title, content, category } = req.body;
+      const { title, category, content, images } = req.body;
 
       console.log("req.user--------", req.user);
 
@@ -45,6 +45,7 @@ const blog = {
         title: title,
         content: content,
         category: category,
+        images: images,
         author: user._id,
       });
 
@@ -82,24 +83,48 @@ const blog = {
   deleteBlog: async (req, res) => {
     try {
       const id = req.user.id;
-      const blogId = req.params;
+      const blogId = req.params.id;
 
-      const user = await userModel.findById(id);
+      const blogToDelete = await blogModel.findById(blogId);
 
-      if (!user) {
-        helper.error(res, "user not found!");
+      if (!blogToDelete) {
+        helper.error(res, "blog not found!");
       }
 
-      const myBlogs = blogModel.find({ author: user._id });
-
-      if (!blogExist) {
-        helper.error(res, "blog post not found!");
-      }
-
-      await blogModel.deleteOne({ blogId });
+      await blogModel.deleteOne({ _id: blogId, author: id });
 
       helper.success(res, "blog deleted successfully.");
     } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  updateBlog: async (req, res) => {
+    try {
+      const id = req.user.id;
+      const blogId = req.params.id;
+      const { title, category, content, images } = req.body;
+
+      const blogPost = await blogModel.findOneAndUpdate(
+        { _id: blogId, author: id },
+        {
+          title: title,
+          content: content,
+          category: category,
+          images: images,
+        },
+        {
+          new: true,
+        },
+      );
+
+      if (!blogPost) {
+        return helper.error(res, "Blog not found!");
+      }
+
+      helper.success(res, "blog updated successfully.", blogPost);
+    } catch (error) {
+      console.log("UPDATE ERROR:", error);
       helper.error(res, "something went wrong!", error);
     }
   },
