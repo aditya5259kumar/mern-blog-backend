@@ -356,6 +356,10 @@
 import React, { useState } from "react";
 import { Editor } from "primereact/editor";
 import { AVAILABLE_CATEGORIES } from "../data/data";
+import { HiX, HiOutlinePlusSm } from "react-icons/hi";
+import { HiOutlinePhotograph } from "react-icons/hi";
+import { HiTrash } from "react-icons/hi";
+import { HiLightBulb } from "react-icons/hi";
 
 const CreateBlog = () => {
   const [blogData, setBlogData] = useState({
@@ -501,29 +505,51 @@ const CreateBlog = () => {
   }
 
   return (
-    <div className="py-20 container px-8 md:px-20 mx-auto">
-      <h1 className="text-5xl text-gray-800 font-semibold text-center mb-6">
-        Create New Blog
-      </h1>
+    <div className="">
+      <div className="bg-linear-to-r from-gray-900 to-gray-500 py-10 md:py-20">
+        <h1 className="text-4xl md:text-5xl text-white font-semibold text-center mb-6">
+          # Create New Blog
+        </h1>
+        <p className="text-center text-sm md:text-lg text-white px-20 md:px-8 ">
+          Share your thoughts, ideas, and stories with the world
+        </p>
+      </div>
 
-      <form onSubmit={submitHandler}>
+      <form
+        onSubmit={submitHandler}
+        className="py-20 container px-8 md:px-20 mx-auto"
+      >
+        <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 ">
+          Blog Details
+        </h3>
+        <p className="font-semibold text-sm md:text-[16px] text-gray-700 pb-2 mb-8 border-b border-gray-500">
+          Fill in the information below to create your blog post
+        </p>
+
         {/* Title */}
         <div className="my-8">
-          <h5>Blog Title</h5>
-          {error.title && <p className="text-xs text-red-700">{error.title}</p>}
+          <h5 className="text-sm mb-1">
+            Blog Title <span className="text-red-700 mb-1">*</span>
+          </h5>
+          {error.title && (
+            <p className="text-xs text-red-700 mb-1">{error.title}</p>
+          )}
           <input
             type="text"
+            placeholder="Title"
             name="title"
             value={blogData.title}
             onChange={handlerOnChnage}
-            className="w-full border px-4 py-2"
+            className={`w-full text-xl capitalize border border-gray-300 rounded-lg focus:border-gray-600 focus:outline-none px-4 py-3`}
           />
         </div>
 
         {/* Categories */}
         <div className="my-8">
-          <h5>Blog Category</h5>
-          {error.category && (
+          <h5 className="text-sm mb-1">
+            Blog Category <span className="text-red-700">*</span>
+          </h5>
+          {error.title && (
             <p className="text-xs text-red-700">{error.category}</p>
           )}
           <div className="flex flex-wrap gap-3 mt-4">
@@ -534,13 +560,19 @@ const CreateBlog = () => {
                 <span
                   key={val}
                   onClick={() => toggleCategory(val)}
-                  className={`px-3 py-1 border rounded cursor-pointer ${
+                  className={`flex items-center text-sm px-3 py-1 rounded cursor-pointer ${
                     selected
                       ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-700"
+                      : "bg-gray-100 text-gray-600"
                   }`}
                 >
+                  {!selected && (
+                    <HiOutlinePlusSm className="text-sm font-bold mt-0.5 mr-2" />
+                  )}
                   {val}
+                  {selected && (
+                    <HiX className="text-sm font-bold mt-0.5 ml-2" />
+                  )}
                 </span>
               );
             })}
@@ -549,11 +581,23 @@ const CreateBlog = () => {
 
         {/* Images */}
         <div className="my-8">
-          <h5>Add Images</h5>
-          {error.image && <p className="text-xs text-red-700">{error.image}</p>}
+          <h5 className="text-sm mb-1">
+            Blog Images <span className="text-red-700">*</span>
+          </h5>
+          {error.image && (
+            <p className="text-xs text-red-700 mb-3">{error.image}</p>
+          )}
 
-          <label className="border bg-gray-200 border-dashed border-gray-500 flex items-center justify-center cursor-pointer py-10">
-            + Click to Upload Images
+          <label className="transition-all rounded-lg border-2 border-gray-300 bg-gray-100 border-dashed hover:border-gray-600 flex flex-col gap-4 items-center justify-center cursor-pointer py-5">
+            <HiOutlinePhotograph className="text-4xl text-gray-500" />
+            <div>
+              <p className=" text-gray-600 text-sm font-medium">
+                Click to upload images
+              </p>
+              <p className="text-xs text-center mt-1 text-gray-400">
+                (Max 2MB each)
+              </p>
+            </div>
             <input
               type="file"
               multiple
@@ -568,17 +612,17 @@ const CreateBlog = () => {
               {blogData.image.map((file, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center border p-2 rounded"
+                  className="flex justify-between items-center border border-gray-500 p-2 rounded"
                 >
-                  <span className="text-sm text-gray-700 truncate">
+                  <span className="text-sm text-gray-600 truncate">
                     {file.name}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="text-red-600 text-xs"
+                    className="text-red-600 p-1 cursor-pointer hover:bg-red-200 transition-all rounded"
                   >
-                    Remove
+                    <HiTrash />
                   </button>
                 </div>
               ))}
@@ -588,55 +632,105 @@ const CreateBlog = () => {
 
         {/* Content */}
         <div className="my-8">
-          <h5>Blog Content</h5>
-          {error.content && (
-            <p className="text-xs text-red-700">{error.content}</p>
+          <h5 className="text-sm mb-1">
+            Blog Content <span className="text-red-700">*</span>
+          </h5>
+          {error.title && (
+            <p className="text-xs text-red-700 mb-3">{error.content}</p>
           )}
 
-          <Editor
-            value={blogData.content}
-            onTextChange={(e) => {
-              setBlogData({
-                ...blogData,
-                content: e.htmlValue,
-              });
-              setError({ ...error, content: "" });
-            }}
-            headerTemplate={
-              <span className="ql-formats">
-                <select className="ql-header" defaultValue="">
-                  <option value="1">Heading</option>
-                  <option value="2">Subheading</option>
-                  <option value="">Normal</option>
-                </select>
+          <div
+            className={`rounded-lg overflow-hidden border ${
+              error.content ? "border-red-500" : "border-gray-300"
+            }`}
+          >
+            <Editor
+              value={blogData.content}
+              onTextChange={(e) => {
+                setBlogData({
+                  ...blogData,
+                  content: e.htmlValue,
+                });
+                setError({ ...error, content: "" });
+              }}
+              placeholder="Start writing your amazing blog content here..."
+              className="shadow-xl overflow-hidden"
+              headerTemplate={
+                <span className="ql-formats">
+                  <select className="ql-header" defaultValue="">
+                    <option value="1">Heading</option>
+                    <option value="2">Subheading</option>
+                    <option value="">Normal</option>
+                  </select>
 
-                <button className="ql-bold" />
-                <button className="ql-italic" />
-                <button className="ql-underline" />
-                <button className="ql-strike" />
+                  <button className="ql-bold" />
+                  <button className="ql-italic" />
+                  <button className="ql-underline" />
+                  <button className="ql-strike" />
 
-                <select className="ql-color" />
-                <select className="ql-background" />
+                  <select className="ql-color" />
+                  <select className="ql-background" />
 
-                <button className="ql-list" value="ordered" />
-                <button className="ql-list" value="bullet" />
+                  <button className="ql-list" value="ordered" />
+                  <button className="ql-list" value="bullet" />
 
-                <button className="ql-link" />
-                <button className="ql-blockquote" />
-                <button className="ql-code-block" />
-                <button className="ql-clean" />
-              </span>
-            }
-            style={{ height: "320px" }}
-          />
+                  <button className="ql-link" />
+                  <button className="ql-blockquote" />
+                  <button className="ql-code-block" />
+                  <button className="ql-clean" />
+                </span>
+              }
+              style={{ height: "320px" }}
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="px-6 py-3 rounded-md bg-gray-800 text-white"
-        >
-          Publish
-        </button>
+        <div className="md:flex block items-start justify-between">
+          <div className=" my-6 md:my-0 p-6 bg-gray-50 rounded-xl border border-gray-200">
+            <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <HiLightBulb className="text-xl text-yellow-500" /> Tips for a
+              Great Blog
+            </h3>
+            <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+              <li>Write a catchy title that captures readers attention</li>
+              <li>
+                Select relevant categories to help readers discover your content
+              </li>
+              <li>
+                Include high-quality images to make your blog visually appealing
+              </li>
+              <li>
+                Write engaging content with proper formatting using the editor
+                tools
+              </li>
+            </ul>
+          </div>
+
+          <div className="">
+            {/* <p className="text-sm mb-5 text-center text-red-700">
+              ** Something Went Wrong! **
+            </p> */}
+            <span
+              onClick={() =>
+                setBlogData({
+                  title: "",
+                  category: [],
+                  image: [],
+                  content: "",
+                })
+              }
+              className="px-6 mr-4 md:mr-10 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-600"
+            >
+              Reset
+            </span>
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-md bg-gray-800 text-white"
+            >
+              Publish
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );
