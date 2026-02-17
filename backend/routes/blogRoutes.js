@@ -1,6 +1,7 @@
 import express from "express";
 import blogController from "../controller/blogController.js";
 import authenticateUser from "../middleware/authenticateUser.js";
+import upload from "../middleware/multer.js";
 
 const router = express.Router();
 
@@ -8,7 +9,12 @@ const router = express.Router();
 router.get("/all-blogs", blogController.allBlogs);
 
 // create blog
-router.post("/create-blog", authenticateUser, blogController.createBlog);
+router.post(
+  "/create-blog",
+  authenticateUser,
+  upload.array("image", 4),
+  blogController.createBlog,
+);
 
 // delete blog
 router.get("/my-blogs", authenticateUser, blogController.myBlogs);
@@ -17,6 +23,11 @@ router.get("/my-blogs", authenticateUser, blogController.myBlogs);
 router.delete("/delete-blog/:id", authenticateUser, blogController.deleteBlog);
 
 // update blog
-router.put("/update-blog/:id", authenticateUser, blogController.updateBlog);
+router.put(
+  "/update-blog/:id",
+  authenticateUser,
+  upload.array("image", 4),
+  blogController.updateBlog,
+);
 
 export default router;

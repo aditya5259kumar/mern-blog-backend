@@ -7,7 +7,7 @@ const blog = {
 
   allBlogs: async (req, res) => {
     try {
-      const allBlogs = await blogModel.find().populate("author","userName")
+      const allBlogs = await blogModel.find().populate("author", "userName");
 
       helper.success(res, "all blogs fetched successfully.", allBlogs);
     } catch (error) {
@@ -19,18 +19,22 @@ const blog = {
   createBlog: async (req, res) => {
     try {
       const id = req.user.id;
-      const { title, category, content, images } = req.body;
+      let { title, category, content } = req.body;
 
-      console.log("req.user--------", req.user);
+      const images = req.files.map((file) => `/uploads/${file.filename}`);
+
+      // console.log("req.body--------", req.body);
+      // console.log("req.user--------", req.user);
+      // console.log("images--------", images);
 
       if (!title || !content || !category) {
-        helper.error(res, "title, content, and category is required");
+        return helper.error(res, "title, content, and category is required");
       }
 
       const user = await userModel.findById(id);
 
       if (!user) {
-        helper.error(res, "user not found!");
+        return helper.error(res, "user not found!");
       }
 
       const blogPost = await blogModel.create({
@@ -41,9 +45,9 @@ const blog = {
         author: user._id,
       });
 
-      helper.success(res, "blog created successfully.", blogPost);
+      return helper.success(res, "blog created successfully.", blogPost);
     } catch (error) {
-      helper.error(res, "something went wrong!", error);
+      return helper.error(res, "something went wrong!", error.message);
     }
   },
 
@@ -87,7 +91,7 @@ const blog = {
         helper.error(res, "Blog not found or not authorized!", error);
       }
 
-      helper.success(res, "blog deleted successfully.", blogPost);
+      helper.success(res, "blog deleted successfully.");
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }
@@ -96,31 +100,29 @@ const blog = {
   // -------- update blog --------
   updateBlog: async (req, res) => {
     try {
-      const id = req.user.id;
+      const userId = req.user.id;
       const blogId = req.params.id;
-      const { title, category, content, images } = req.body;
+      const { title, category, content } = req.body;
+
+      const updateData = { title, category, content };
+
+      if (req.files.length > 0) {
+        updateData.images = req.files.map((file) => file.path);
+      }
 
       const blogPost = await blogModel.findOneAndUpdate(
-        { _id: blogId, author: id },
-        {
-          title: title,
-          content: content,
-          category: category,
-          images: images,
-        },
-        {
-          new: true,
-        },
+        { _id: blogId, author: userId },
+        updateData,
+        { new: true },
       );
 
       if (!blogPost) {
         return helper.error(res, "Blog not found!");
       }
 
-      helper.success(res, "blog updated successfully.", blogPost);
+      helper.success(res, "Blog updated successfully.", blogPost);
     } catch (error) {
-      console.log("UPDATE ERROR:", error);
-      helper.error(res, "something went wrong!", error);
+      helper.error(res, "Something went wrong!", error);
     }
   },
 };

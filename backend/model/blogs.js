@@ -18,11 +18,13 @@ const blogSchema = new mongoose.Schema(
     },
     images: {
       type: [String],
-      default: null,
+      default: [],
+      required: true,
     },
     category: {
       type: [String],
-      default: null,
+      default: [],
+      required: true,
     },
   },
   { timestamps: true },
