@@ -2,7 +2,9 @@ import React from "react";
 import blogCard from "../assets/blogCard.jpg";
 import { HiOutlineCalendar } from "react-icons/hi";
 
-const BlogCard = () => {
+const BlogCard = ({ item }) => {
+  console.log("item.author", item.author.userName);
+
   return (
     <div className="w-full rounded-2xl">
       <div className="overflow-hidden rounded-lg">
@@ -14,21 +16,24 @@ const BlogCard = () => {
       </div>
       <div className="">
         <div className="flex items-center space-x-6 my-5">
-          <button className="px-3 py-1 bg-gray-600 rounded-sm text-white text-sm">
-            Technology
-          </button>
+          {item.category.map((val) => (
+            <button
+              key={val}
+              className="px-3 py-1 bg-gray-600 rounded-sm text-white text-sm"
+            >
+              {val}
+            </button>
+          ))}
           <p className="text-gray-600">
             <span className="mr-2">By</span>
-            Mary R. Edward
+            {item.author.userName}
           </p>
         </div>
         <div>
-          <h4 className="font-semibold text-lg mb-2">
-            20 Wonderful Blog. Number 16 is Absolutely Stunning
-          </h4>
+          <h4 className="font-semibold text-lg mb-2">{item.title}</h4>
           <div className="flex items-center space-x-2">
             <HiOutlineCalendar className="text-lg" />
-            <span className="text-gray-600">April 10, 2022</span>
+            <span className="text-gray-600">{item.createdAt}</span>
           </div>
         </div>
       </div>

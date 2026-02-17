@@ -7,15 +7,7 @@ const blog = {
 
   allBlogs: async (req, res) => {
     try {
-      const id = req.user.id;
-
-      const user = await userModel.findById(id);
-
-      if (!user) {
-        helper.error(res, "user not found!");
-      }
-
-      const allBlogs = await blogModel.find();
+      const allBlogs = await blogModel.find().populate("author","userName")
 
       helper.success(res, "all blogs fetched successfully.", allBlogs);
     } catch (error) {

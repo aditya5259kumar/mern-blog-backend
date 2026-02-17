@@ -1,7 +1,20 @@
-import React from "react";
+import { useEffect } from "react";
 import BlogCard from "../components/BlogCard";
+import { readBlogs } from "../redux/slices/blogSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Blog = () => {
+  const {
+    blogs,
+    loading,
+    error: authError,
+  } = useSelector((state) => state.blog);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(readBlogs());
+  }, [dispatch]);
+
   return (
     <div className="py-20">
       <div className="container px-8 md:px-20 mx-auto">
@@ -14,17 +27,19 @@ const Blog = () => {
           dignissimos alias at perferendis facere placeat quisquam unde fugiat
           totam pariatur ullam aspernatur! Error soluta magni esse ducimus?
         </p>
-        <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-10 gap-y-16">
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-        </div>
+
+        {loading ? (
+          "Loading..."
+        ) : (
+          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-10 gap-y-16">
+            {blogs.map((item) => (
+              <BlogCard key={item._id} item={item} />
+            ))}
+          </div>
+        )}
+        {authError && (
+          <p className="text-sm text-center text-red-700 mb-4">{authError}</p>
+        )}
       </div>
     </div>
   );

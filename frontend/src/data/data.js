@@ -1,12 +1,12 @@
 export const NAVBMENU = [
-  // {
-  //   name: "Home",
-  //   href: "/",
-  // },
-  // {
-  //   name: "About",
-  //   href: "/",
-  // },
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "About",
+    href: "/",
+  },
   {
     name: "Blog",
     href: "/blog",
@@ -15,14 +15,14 @@ export const NAVBMENU = [
     name: "Create Blog",
     href: "/create-blog",
   },
-  // {
-  //   name: "Categories",
-  //   href: "/",
-  // },
-  // {
-  //   name: "Contacts",
-  //   href: "/",
-  // },
+  {
+    name: "Categories",
+    href: "/",
+  },
+  {
+    name: "Contacts",
+    href: "/",
+  },
 ];
 
 export const AVAILABLE_CATEGORIES = [
