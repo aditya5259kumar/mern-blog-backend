@@ -82,23 +82,26 @@ const blog = {
 
   deleteBlog: async (req, res) => {
     try {
-      const id = req.user.id;
       const blogId = req.params.id;
+      const userId = req.user.id;
 
-      const blogToDelete = await blogModel.findById(blogId);
+      const result = await blogModel.deleteOne({
+        _id: blogId,
+        author: userId,
+      });
 
-      if (!blogToDelete) {
-        helper.error(res, "blog not found!");
+      console.log("result---------", result);
+      if (result.deletedCount === 0) {
+        helper.error(res, "Blog not found or not authorized!", error);
       }
 
-      await blogModel.deleteOne({ _id: blogId, author: id });
-
-      helper.success(res, "blog deleted successfully.");
+      helper.success(res, "blog deleted successfully.", blogPost);
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }
   },
 
+  // -------- update blog --------
   updateBlog: async (req, res) => {
     try {
       const id = req.user.id;

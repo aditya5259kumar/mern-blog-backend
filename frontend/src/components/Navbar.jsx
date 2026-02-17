@@ -2,13 +2,28 @@ import React, { useState } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
 import { NAVBMENU } from "../data/data";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
 
   function handleSideBar() {
-    setSideBar(() => setSideBar(!sideBar));
+    setSideBar((prev) => !prev);
+  }
+
+  const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleAuthClick() {
+    if (token) {
+      dispatch(logout());
+      navigate("/login");
+    } else {
+      navigate("/login");
+    }
   }
 
   return (
@@ -34,8 +49,11 @@ const Navbar = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-8">
-              <button className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium">
-                <span>Contact Us</span>
+              <button
+                onClick={handleAuthClick}
+                className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
+              >
+                <span>{token ? "Log Out" : "Log In"}</span>
               </button>
 
               <div
@@ -62,6 +80,7 @@ const Navbar = () => {
                 <Link
                   key={index}
                   to={value.href}
+                  onClick={handleSideBar}
                   className="relative pb-0.5 group"
                 >
                   {value.name}
@@ -69,8 +88,11 @@ const Navbar = () => {
                 </Link>
               ))}
             </nav>
-            <button className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium">
-              <span>Contact Us</span>
+            <button
+              onClick={handleAuthClick}
+              className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
+            >
+              <span>{token ? "Log Out" : "Log In"}</span>
             </button>
           </div>
         )}

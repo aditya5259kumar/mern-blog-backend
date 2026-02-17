@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../redux/slices/authSlice";
 
 const Login = () => {
   const [passwordShow, setPasswordShow] = useState(false);
@@ -9,6 +11,11 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState({});
+
+  const { loading, error: authError } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleShowPassword() {
     setPasswordShow(() => !passwordShow);
@@ -19,28 +26,32 @@ const Login = () => {
     setError({ ...error, [e.target.name]: "" });
   }
 
-  function submitHandler(e) {
+  async function submitHandler(e) {
     e.preventDefault();
 
     const newError = {};
     const emailRegex = /^[a-zA-Z][^\s@]*@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.email) {
-      newError.email = "email is required!";
+      newError.email = "Email is required!";
     } else if (!emailRegex.test(formData.email)) {
-      newError.email = "invalid email address!";
+      newError.email = "Invalid email address!";
     }
 
     if (!formData.password) {
-      newError.password = "password is required!";
+      newError.password = "Password is required!";
     }
 
     if (Object.keys(newError).length > 0) {
       setError(newError);
       return;
     }
-    console.log("Form submitted", formData);
-    setError({});
+
+    const result = await dispatch(loginUser(formData));
+
+    if (result.meta.requestStatus === "fulfilled") {
+      navigate("/blog");
+    }
   }
 
   return (
@@ -104,12 +115,14 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* <p className="text-sm text-center text-red-700 mb-4">
-                ** Invalid Credentials! **
-              </p> */}
+              {authError && (
+                <p className="text-sm text-center text-red-700 mb-4">
+                  {authError}
+                </p>
+              )}
 
               <button className="mb-4 bg-gray-700 border border-gray-700 hover:bg-transparent text-white hover:text-black px-7 py-4 rounded-lg text-sm font-medium transition-all ease-in-out">
-                Log In
+                {loading ? "Loading..." : "Log In"}
               </button>
             </form>
             <a href="" className="block">

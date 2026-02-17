@@ -11,8 +11,6 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 
-import authentiateUser from "./middleware/authenticateUser.js";
-
 const app = express();
 dotenv.config();
 const port = process.env.PORT;
@@ -43,7 +41,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", userRoutes);
-app.use(authentiateUser);
 app.use("/api", blogRoutes);
 
 app.get("/", (req, res) => {

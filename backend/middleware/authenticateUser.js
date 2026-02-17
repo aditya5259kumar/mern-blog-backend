@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import userModel from "../model/users.js";
 import helper from "../utils/helper.js";
 
-const authentiateUser = async (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -23,6 +23,10 @@ const authentiateUser = async (req, res, next) => {
 
     // console.log("user------", user);
 
+    if (!user) {
+      return helper.error(res, "User no longer exists");
+    }
+
     req.user = user;
     next();
   } catch (error) {
@@ -30,4 +34,4 @@ const authentiateUser = async (req, res, next) => {
   }
 };
 
-export default authentiateUser;
+export default authenticateUser;

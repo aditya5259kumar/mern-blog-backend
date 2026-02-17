@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { signupUser } from "../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Signup = () => {
   const [passwordShow, setPasswordShow] = useState(false);
@@ -11,6 +13,11 @@ const Signup = () => {
   });
   const [error, setError] = useState({});
 
+  const { loading, error: authError } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   function handleShowPassword() {
     setPasswordShow(() => !passwordShow);
   }
@@ -20,7 +27,7 @@ const Signup = () => {
     setError({ ...error, [e.target.name]: "" });
   }
 
-  function submitHandler(e) {
+  async function submitHandler(e) {
     e.preventDefault();
 
     const newError = {};
@@ -53,9 +60,12 @@ const Signup = () => {
       setError(newError);
       return;
     }
-    console.log("Form submitted:", formData);
 
-    setError({});
+    const result = await dispatch(signupUser(formData));
+
+    if (result.meta.requestStatus === "fulfilled") {
+      navigate("/blog");
+    }
   }
 
   return (
@@ -132,11 +142,13 @@ const Signup = () => {
                 </div>
               </div>
 
-              {/* <p className="text-red-700 text-center text-sm mb-4">
-                ** failed to Signin! **
-              </p> */}
+              {authError && (
+                <p className="text-sm text-center text-red-700 mb-4">
+                  {authError}
+                </p>
+              )}
               <button className="mb-4 bg-gray-700 border border-gray-700 hover:bg-transparent text-white hover:text-black px-7 py-4 rounded-lg text-sm font-medium transition-all ease-in-out">
-                Sign Up
+                {loading ? "Loading..." : "Log In"}
               </button>
             </form>
           </div>
