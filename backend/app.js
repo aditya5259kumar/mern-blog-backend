@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 
 import connectDB from "./config/db.js";
+import userAuthRoutes from "./routes/userAuthRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 
@@ -40,8 +41,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", userRoutes);
+app.use("/api", userAuthRoutes);
 app.use("/api", blogRoutes);
+app.use("/api", userRoutes);
 
 app.get("/", (req, res) => {
   res.render("index", { msg: "hey from express" });

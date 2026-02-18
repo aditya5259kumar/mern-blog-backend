@@ -9,7 +9,7 @@ const userAuth = {
     try {
       const { name, userName, email, password, bio, profilePhoto } = req.body;
 
-      if ( !userName || !email || !password) {
+      if (!userName || !email || !password) {
         helper.error(res, "all fields are required!");
       }
 
@@ -43,7 +43,6 @@ const userAuth = {
   },
 
   // -------- login---------
-
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -75,6 +74,7 @@ const userAuth = {
       helper.error(res, "something went wrong!", error);
     }
   },
-};
+}
+
 
 export default userAuth;

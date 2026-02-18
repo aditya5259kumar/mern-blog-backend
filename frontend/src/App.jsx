@@ -5,8 +5,10 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Blog from "./pages/Blog";
-import CreateBlog from "./pages/CreateBlog";
+import CreateBlog from "./pages/createBlog";
 import { useSelector } from "react-redux";
+import BlogDetail from "./pages/BlogDetail";
+import ContactUs from "./pages/ContactUs";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
@@ -16,6 +18,9 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<ContactUs />} />
+
+        <Route path="/blog/:id" element={<BlogDetail />} />
 
         <Route
           path="/login"

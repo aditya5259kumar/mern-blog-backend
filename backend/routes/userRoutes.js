@@ -1,12 +1,8 @@
 import express from "express";
-import userAuth from "../controller/userAuthController.js";
-import authValidator from "../validators/authValidator.js";
+import userController from "../controller/userController.js";
+import authenticateUser from "../middleware/authenticateUser.js";
 
 const router = express.Router();
 
-const { signupValidator, loginValidator, validate } = authValidator;
-
-router.post("/signup", signupValidator, validate, userAuth.signup);
-router.post("/login", loginValidator, validate, userAuth.login);
-
+router.get("/my-profile", authenticateUser, userController.myProfile);
 export default router;

@@ -2,11 +2,27 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // readBlogs
-export const readBlogs = createAsyncThunk(
-  "blog/readBlogs",
-  async (_, thunkAPI) => {
+export const readBlogs = createAsyncThunk("blog", async (_, thunkAPI) => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/all-blogs");
+
+    // console.log("response.data-------", response.data);
+
+    // console.log("response.data.data-------", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || "something went Wrong",
+    );
+  }
+});
+
+// read single blog
+export const blogDetail = createAsyncThunk(
+  "blog-detail",
+  async (id, thunkAPI) => {
     try {
-      const response = await axios.get("http://localhost:3000/api/all-blogs");
+      const response = await axios.get(`http://localhost:3000/api/blog/${id}`);
 
       // console.log("response.data-------", response.data);
 
@@ -22,7 +38,7 @@ export const readBlogs = createAsyncThunk(
 
 // createBlogs
 export const createBlogs = createAsyncThunk(
-  "blog/createBlogs",
+  "createBlogs",
   async (blogData, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
@@ -54,13 +70,14 @@ const blogSlice = createSlice({
   name: "blog",
   initialState: {
     blogs: [],
+    currentBlog:null,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // readBlogs
+      // readBlogs---------
       .addCase(readBlogs.pending, (state) => {
         state.loading = true;
       })
@@ -74,7 +91,21 @@ const blogSlice = createSlice({
         state.error = action.payload;
       })
 
-      // createBlogs
+      // read single blog--------------
+      .addCase(blogDetail.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(blogDetail.fulfilled, (state, action) => {
+        state.currentBlog = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(blogDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // createBlogs-------------
       .addCase(createBlogs.pending, (state) => {
         state.loading = true;
         state.error = null;

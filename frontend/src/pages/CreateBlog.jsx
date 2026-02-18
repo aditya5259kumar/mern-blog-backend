@@ -8,6 +8,8 @@ import { HiLightBulb } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { createBlogs } from "../redux/slices/blogSlice";
 import { useNavigate } from "react-router";
+import {  toast } from 'react-toastify';
+
 
 const CreateBlog = () => {
   const [blogData, setBlogData] = useState({
@@ -26,7 +28,7 @@ const CreateBlog = () => {
   console.log("token===========", token);
 
   if (!token) {
-    alert("please login to create blog.");
+    toast.error("please login to create blog.");
   }
 
   const { loading, error: authError } = useSelector((state) => state.blog);

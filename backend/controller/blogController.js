@@ -15,6 +15,21 @@ const blog = {
     }
   },
 
+  // -------- read single blog --------
+  singleBlogDetail: async (req, res) => {
+    try {
+      const blogId = req.params.id;
+
+      const blogDetail = await blogModel
+        .findById(blogId)
+        .populate("author", "userName");
+
+      helper.success(res, "all blogs fetched successfully.", blogDetail);
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
   // -------- create blog --------
   createBlog: async (req, res) => {
     try {

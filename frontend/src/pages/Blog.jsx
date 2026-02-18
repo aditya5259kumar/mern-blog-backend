@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import BlogCard from "../components/BlogCard";
 import { readBlogs } from "../redux/slices/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router";
 
 const Blog = () => {
   const {
@@ -29,11 +30,13 @@ const Blog = () => {
         </p>
 
         {loading ? (
-          "Loading..."
+          <p className="text-center">Loading...</p>
         ) : (
           <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-10 gap-y-16">
             {blogs.map((item) => (
-              <BlogCard key={item._id} item={item} />
+              <Link to={`/blog/${item._id}`} key={item._id}>
+                <BlogCard item={item} />
+              </Link>
             ))}
           </div>
         )}

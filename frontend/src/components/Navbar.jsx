@@ -5,6 +5,8 @@ import { NAVBMENU } from "../data/data";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
+import { toast } from "react-toastify";
+import user from "../assets/defaultUser.jpg";
 
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
@@ -17,9 +19,10 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleAuthClick() {
+  function handleAuth() {
     if (token) {
       dispatch(logout());
+      toast.success("LogOut successfully", { position: "top-center" });
       navigate("/login");
     } else {
       navigate("/login");
@@ -49,8 +52,14 @@ const Navbar = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-8">
+              {token && (
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img src={user} alt="" />
+                </div>
+              )}
+
               <button
-                onClick={handleAuthClick}
+                onClick={handleAuth}
                 className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
               >
                 <span>{token ? "Log Out" : "Log In"}</span>
@@ -58,9 +67,9 @@ const Navbar = () => {
 
               <div
                 onClick={handleSideBar}
-                className="p-2 block md:hidden bg-black text-white rounded-lg cursor-pointer"
+                className="p-1.5 block md:hidden bg-black text-white rounded-lg cursor-pointer"
               >
-                <HiOutlineMenuAlt4 className="text-2xl " />
+                <HiOutlineMenuAlt4 className="text-3xl " />
               </div>
             </div>
           </div>
@@ -89,7 +98,7 @@ const Navbar = () => {
               ))}
             </nav>
             <button
-              onClick={handleAuthClick}
+              onClick={handleAuth}
               className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
             >
               <span>{token ? "Log Out" : "Log In"}</span>

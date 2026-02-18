@@ -1,15 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // login api fetch-------------
 export const loginUser = createAsyncThunk(
-  "auth/loginUser",
+  "loginUser",
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/login",
         userData,
       );
+
+      toast.success("loggedIn successfully", { position: "top-center" });
 
       console.log("response.data---------", response.data);
 
@@ -30,13 +33,15 @@ export const loginUser = createAsyncThunk(
 
 // signup api fetch-------------
 export const signupUser = createAsyncThunk(
-  "auth/signupUser",
+  "signupUser",
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/signup",
         userData,
       );
+
+      toast.success("signeUp successfully", { position: "top-center" });
 
       console.log("response.data---------", response.data);
 
@@ -53,7 +58,18 @@ export const signupUser = createAsyncThunk(
       );
     }
   },
-);
+  );
+
+  // user profile api fetch-------------
+  // export const myProfile = createAsyncThunk("myProfile", async(_,thunkAPI)=>{
+  //   try {
+  //     const response = await axios.get("")
+  //   } catch (error) {
+  //     return thunkAPI.rejectWithValue(error.response?.data?.message || "fail to fetch profile")
+  //   }
+  // })
+
+
 
 const authSlice = createSlice({
   name: "auth",
@@ -71,7 +87,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //login
+      //login--------------
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })
@@ -85,7 +101,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      //signup
+      //signup----------
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
       })

@@ -21,7 +21,7 @@ export const NAVBMENU = [
   },
   {
     name: "Contacts",
-    href: "/",
+    href: "/contact",
   },
 ];
 
