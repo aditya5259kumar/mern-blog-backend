@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import "../data/blogTextEditor.css";
+import { useEffect, useState } from "react";
 import { Editor } from "primereact/editor";
 import { AVAILABLE_CATEGORIES } from "../data/data";
 import { HiX, HiOutlinePlusSm } from "react-icons/hi";
@@ -6,10 +7,9 @@ import { HiOutlinePhotograph } from "react-icons/hi";
 import { HiTrash } from "react-icons/hi";
 import { HiLightBulb } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
-import { createBlogs } from "../redux/slices/blogSlice";
-import { useNavigate } from "react-router";
-import {  toast } from 'react-toastify';
-
+import { updateBlog, blogDetail, createBlogs } from "../redux/slices/blogSlice";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
 
 const CreateBlog = () => {
   const [blogData, setBlogData] = useState({
@@ -25,7 +25,7 @@ const CreateBlog = () => {
 
   const token = localStorage.getItem("token");
 
-  console.log("token===========", token);
+  // console.log("token===========", token);
 
   if (!token) {
     toast.error("please login to create blog.");
@@ -35,12 +35,35 @@ const CreateBlog = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { id } = useParams();
+  const editMode = Boolean(id);
+  const { currentBlog } = useSelector((state) => state.blog);
+
+  console.log(editMode);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(blogDetail(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (editMode && currentBlog) {
+      setBlogData({
+        title: currentBlog.title,
+        category: currentBlog.category,
+        image: [],
+        content: currentBlog.content,
+      });
+    }
+  }, [editMode, currentBlog]);
+
   function handlerOnChnage(e) {
     setBlogData({ ...blogData, [e.target.name]: e.target.value });
     setError({ ...error, [e.target.name]: "" });
   }
 
-  function submitHandler(e) {
+  async function submitHandler(e) {
     e.preventDefault();
     const newError = {};
 
@@ -56,7 +79,7 @@ const CreateBlog = () => {
       newError.category = "More than 4 categories cannot be selected!";
     }
 
-    if (blogData.image.length === 0) {
+    if (!editMode && blogData.image.length === 0) {
       newError.image = "At least one image is required!";
     }
 
@@ -84,8 +107,25 @@ const CreateBlog = () => {
       formData.append("image", file);
     });
 
-    dispatch(createBlogs(formData));
-    navigate("/blog");
+    if (editMode) {
+      const result = await dispatch(updateBlog({ id, blogData: formData }));
+
+      if (!result.error) {
+        toast.success("Blog updated successfully");
+        navigate("/blog");
+      } else {
+        toast.error("Update failed");
+      }
+    } else {
+      const result = await dispatch(createBlogs(formData));
+
+      if (!result.error) {
+        toast.success("Blog created successfully");
+        navigate("/blog");
+      } else {
+        toast.error("Creation failed");
+      }
+    }
   }
 
   function toggleCategory(category) {
@@ -183,7 +223,7 @@ const CreateBlog = () => {
     <div className="">
       <div className="bg-linear-to-r from-gray-900 to-gray-500 py-10 md:py-20">
         <h1 className="text-4xl md:text-5xl text-white font-semibold text-center mb-6">
-          # Create New Blog
+          {editMode ? "# Edit Blog" : "# Create New Blog"}
         </h1>
         <p className="text-center text-sm md:text-lg text-white px-20 md:px-8 ">
           Share your thoughts, ideas, and stories with the world
@@ -349,13 +389,22 @@ const CreateBlog = () => {
                   <button className="ql-list" value="ordered" />
                   <button className="ql-list" value="bullet" />
 
+                  <span className="ql-formats">
+                    <select className="ql-align">
+                      <option defaultValue></option>
+                      <option value="center"></option>
+                      <option value="right"></option>
+                      <option value="justify"></option>
+                    </select>
+                  </span>
+
                   <button className="ql-link" />
                   <button className="ql-blockquote" />
                   <button className="ql-code-block" />
                   <button className="ql-clean" />
                 </span>
               }
-              style={{ height: "320px" }}
+              style={{ height: "360px" }}
             />
           </div>
         </div>
@@ -404,7 +453,7 @@ const CreateBlog = () => {
               type="submit"
               className="px-6 py-3 rounded-md bg-gray-800 text-white"
             >
-              {loading ? "loading..." : "Publish"}
+              {loading ? "loading..." : editMode ? "Update" : "Publish"}
             </button>
           </div>
         </div>

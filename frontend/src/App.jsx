@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes, Navigate } from "react-router";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -36,6 +35,12 @@ const App = () => {
           path="/create-blog"
           element={token ? <CreateBlog /> : <Navigate to="/login" replace />}
         />
+
+        <Route
+          path="/edit-blog/:id"
+          element={token ? <CreateBlog /> : <Navigate to="/login" replace />}
+        />
+
       </Routes>
       <Footer />
     </>

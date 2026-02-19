@@ -32,16 +32,16 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    dispatch(myProfile());
-  }, [dispatch]);
+    if (token) {
+      dispatch(myProfile());
+    }
+  }, [dispatch, token]);
 
-  console.log(user);
+  // console.log(user);
 
-  if(loading){
-    <p>loading...</p>
+  if (loading) {
+    return <p>loading...</p>;
   }
-
-   if (!user) return <p>No blog found</p>;
 
   return (
     <>
@@ -69,7 +69,7 @@ const Navbar = () => {
               {token && (
                 <div className="flex items-center gap-2 overflow-hidden">
                   <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
-                  <span className="text-sm capitalize">{user.userName}</span>
+                  <span className="text-sm capitalize">{user?.userName}</span>
                 </div>
               )}
 
@@ -80,9 +80,7 @@ const Navbar = () => {
                   onClick={handleAuth}
                   className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
                 >
-                  <span className="">
-                    {token ? "Log Out" : "Log In"}
-                  </span>
+                  <span className="">{token ? "Log Out" : "Log In"}</span>
                 </button>
               )}
 

@@ -89,7 +89,34 @@ export const deleteBlog = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "something went Wrong",
+        error.response?.data?.message || "failed to delete blog",
+      );
+    }
+  },
+);
+
+//update blog
+export const updateBlog = createAsyncThunk(
+  "updateBlog",
+  async ({id, blogData}, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.put(
+        `http://localhost:3000/api/update-blog/${id}`,
+        blogData,
+        config,
+      );
+
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "failed to update blog",
       );
     }
   },
@@ -161,6 +188,28 @@ const blogSlice = createSlice({
         state.blogs = state.blogs.filter((blog) => blog._id !== deletedId);
       })
       .addCase(deleteBlog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // updateBlogs-------------
+      .addCase(updateBlog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateBlog.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const updatedBlog = action.payload;
+
+        state.blogs = state.blogs.map((blog) =>
+          blog._id === updatedBlog._id ? updatedBlog : blog,
+        );
+
+        state.currentBlog = updatedBlog;
+      })
+      .addCase(updateBlog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

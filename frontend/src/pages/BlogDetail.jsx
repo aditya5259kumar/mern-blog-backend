@@ -14,7 +14,7 @@ const BlogDetail = () => {
     error: authError,
   } = useSelector((state) => state.blog);
 
-  const { user } = useSelector((state) => state.user);
+  const { user, isLoading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -22,9 +22,16 @@ const BlogDetail = () => {
     dispatch(blogDetail(id));
   }, [dispatch, id]);
 
-  console.log("currentBlog=====", currentBlog);
+  // console.log("currentBlog=====", currentBlog);
 
   if (!currentBlog) return <p>No blog found</p>;
+
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
+  if (loading) {
+    return <p>loading...</p>;
+  }
 
   const createdDate = currentBlog.createdAt;
 
@@ -47,10 +54,20 @@ const BlogDetail = () => {
   //   console.log("my blog=============================================");
   // }
 
+  const isAuthor =
+    currentBlog &&
+    user &&
+    currentBlog.author &&
+    currentBlog.author._id === user._id;
+
   function blogDeleteHandler() {
     dispatch(deleteBlog(id));
     navigate("/blog");
     toast.success("blog deleted successfully.");
+  }
+
+  function blogEditHandler() {
+    navigate(`/edit-blog/${currentBlog._id}`);
   }
 
   return (
@@ -73,16 +90,24 @@ const BlogDetail = () => {
         <h4 className="text-center mb-8 font-semibold text-xl">
           Author - {currentBlog.author.userName}
         </h4>
-        <div className="mb-6">{currentBlog.content}</div>
-        {currentBlog.author._id === user._id && (
+        {/* <div className="mb-6">{currentBlog.content}</div> */}
+        <div
+          className="blog-content mb-6"
+          dangerouslySetInnerHTML={{ __html: currentBlog.content }}
+        />
+
+        {isAuthor && (
           <div className="flex justify-center gap-6 items-center">
             <button
               onClick={blogDeleteHandler}
-              className="bg-red-700 py-3 px-5 rounded-lg text-white"
+              className="cursor-pointer bg-red-700 py-3 px-5 rounded-lg text-white"
             >
               Delete Blog
             </button>
-            <button className="bg-gray-700 py-3 px-5 rounded-lg text-white">
+            <button
+              onClick={blogEditHandler}
+              className="cursor-pointer bg-gray-700 py-3 px-5 rounded-lg text-white"
+            >
               Edit Blog
             </button>
           </div>

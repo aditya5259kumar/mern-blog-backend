@@ -17,7 +17,7 @@ const BlogCard = ({ item }) => {
     })
     .replace(",", "");
 
-  console.log(formattedDate);
+  // console.log(formattedDate);
 
   return (
     <div className="w-full rounded-2xl group">

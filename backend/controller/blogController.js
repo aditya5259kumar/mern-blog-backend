@@ -119,10 +119,26 @@ const blog = {
       const blogId = req.params.id;
       const { title, category, content } = req.body;
 
-      const updateData = { title, category, content };
+      const blog = await blogModel.findOne({
+        _id: blogId,
+        author: userId,
+      });
 
-      if (req.files.length > 0) {
-        updateData.images = req.files.map((file) => file.path);
+      if (!blog) {
+        return helper.error(res, "Blog not found!");
+      }
+
+      const updateData = {
+        title,
+        category,
+        content,
+        images: blog.images,
+      };
+
+      if (req.files && req.files.length > 0) {
+        updateData.images = req.files.map(
+          (file) => `/uploads/${file.filename}`,
+        );
       }
 
       const blogPost = await blogModel.findOneAndUpdate(
@@ -130,10 +146,6 @@ const blog = {
         updateData,
         { new: true },
       );
-
-      if (!blogPost) {
-        return helper.error(res, "Blog not found!");
-      }
 
       helper.success(res, "Blog updated successfully.", blogPost);
     } catch (error) {
