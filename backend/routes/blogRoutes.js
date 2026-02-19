@@ -19,7 +19,7 @@ router.post(
   blogController.createBlog,
 );
 
-// delete blog
+// my blogs
 router.get("/my-blogs", authenticateUser, blogController.myBlogs);
 
 // delete blog

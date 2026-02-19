@@ -60,17 +60,6 @@ export const signupUser = createAsyncThunk(
   },
   );
 
-  // user profile api fetch-------------
-  // export const myProfile = createAsyncThunk("myProfile", async(_,thunkAPI)=>{
-  //   try {
-  //     const response = await axios.get("")
-  //   } catch (error) {
-  //     return thunkAPI.rejectWithValue(error.response?.data?.message || "fail to fetch profile")
-  //   }
-  // })
-
-
-
 const authSlice = createSlice({
   name: "auth",
   initialState: {

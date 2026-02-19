@@ -106,7 +106,7 @@ const blog = {
         helper.error(res, "Blog not found or not authorized!", error);
       }
 
-      helper.success(res, "blog deleted successfully.");
+      helper.success(res, "blog deleted successfully.", blogId);
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }

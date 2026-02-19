@@ -66,11 +66,40 @@ export const createBlogs = createAsyncThunk(
   },
 );
 
+// deleteBlogs
+export const deleteBlog = createAsyncThunk(
+  "deleteBlog",
+  async (id, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.delete(
+        `http://localhost:3000/api/delete-blog/${id}`,
+        config,
+      );
+
+      console.log("response.data-------", response.data);
+
+      console.log("response.data.data-------", response.data.data);
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "something went Wrong",
+      );
+    }
+  },
+);
+
 const blogSlice = createSlice({
   name: "blog",
   initialState: {
     blogs: [],
-    currentBlog:null,
+    currentBlog: null,
     loading: false,
     error: null,
   },
@@ -116,6 +145,22 @@ const blogSlice = createSlice({
         state.error = null;
       })
       .addCase(createBlogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // deleteBlogs-------------
+      .addCase(deleteBlog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteBlog.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const deletedId = action.payload;
+        state.blogs = state.blogs.filter((blog) => blog._id !== deletedId);
+      })
+      .addCase(deleteBlog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

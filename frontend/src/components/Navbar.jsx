@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
 import { NAVBMENU } from "../data/data";
@@ -6,7 +6,8 @@ import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
-import user from "../assets/defaultUser.jpg";
+import pfp from "../assets/defaultUser.jpg";
+import { myProfile } from "../redux/slices/userSlice";
 
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
@@ -16,6 +17,7 @@ const Navbar = () => {
   }
 
   const { token } = useSelector((state) => state.auth);
+  const { user, loading, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,9 +31,21 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+    dispatch(myProfile());
+  }, [dispatch]);
+
+  console.log(user);
+
+  if(loading){
+    <p>loading...</p>
+  }
+
+   if (!user) return <p>No blog found</p>;
+
   return (
     <>
-      <header className="shadow-lg">
+      <header className="shadow-lg sticky top-0 left-0 right-0 bg-white z-10">
         <div className="container px-8 md:px-20 py-4 mx-auto">
           <div className=" flex items-center justify-between">
             <div className="overflow-hidden relative z-10 cursor-pointer">
@@ -53,17 +67,24 @@ const Navbar = () => {
 
             <div className="flex justify-center items-center gap-8">
               {token && (
-                <div className="w-10 h-10 rounded-full overflow-hidden">
-                  <img src={user} alt="" />
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
+                  <span className="text-sm capitalize">{user.userName}</span>
                 </div>
               )}
 
-              <button
-                onClick={handleAuth}
-                className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
-              >
-                <span>{token ? "Log Out" : "Log In"}</span>
-              </button>
+              {loading ? (
+                "loading..."
+              ) : (
+                <button
+                  onClick={handleAuth}
+                  className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
+                >
+                  <span className="">
+                    {token ? "Log Out" : "Log In"}
+                  </span>
+                </button>
+              )}
 
               <div
                 onClick={handleSideBar}
