@@ -19,7 +19,7 @@ const Blog = () => {
   return (
     <div className="py-20">
       <div className="container px-8 md:px-20 mx-auto">
-        <h1 className="text-6xl text-gray-800 font-semibold text-center mb-6">
+        <h1 className="text-5xl md:text-6xl text-gray-800 font-bold text-center mb-6">
           Our Blogs
         </h1>
         <p className="text-gray-700 text-center px-4 md:px-6 lg:px-20 mb-15">
@@ -32,7 +32,7 @@ const Blog = () => {
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : (
-          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-10 gap-y-16">
+          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-8 gap-y-16">
             {blogs.map((item) => (
               <Link to={`/blog/${item._id}`} key={item._id}>
                 <BlogCard item={item} />

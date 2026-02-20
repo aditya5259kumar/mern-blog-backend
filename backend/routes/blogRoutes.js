@@ -15,7 +15,7 @@ router.get("/blog/:id", blogController.singleBlogDetail);
 router.post(
   "/create-blog",
   authenticateUser,
-  upload.array("image", 4),
+  upload.array("image", 3),
   blogController.createBlog,
 );
 
@@ -29,7 +29,7 @@ router.delete("/delete-blog/:id", authenticateUser, blogController.deleteBlog);
 router.put(
   "/update-blog/:id",
   authenticateUser,
-  upload.array("image", 4),
+  upload.array("image", 3),
   blogController.updateBlog,
 );
 

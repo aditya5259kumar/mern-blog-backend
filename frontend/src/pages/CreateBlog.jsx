@@ -20,16 +20,8 @@ const CreateBlog = () => {
   });
 
   const [error, setError] = useState({});
-  const MAX_IMAGES = 5;
+  const MAX_IMAGES = 3;
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-
-  const token = localStorage.getItem("token");
-
-  // console.log("token===========", token);
-
-  if (!token) {
-    toast.error("please login to create blog.");
-  }
 
   const { loading, error: authError } = useSelector((state) => state.blog);
   const dispatch = useDispatch();
@@ -39,7 +31,7 @@ const CreateBlog = () => {
   const editMode = Boolean(id);
   const { currentBlog } = useSelector((state) => state.blog);
 
-  console.log(editMode);
+  // console.log(editMode);
 
   useEffect(() => {
     if (id) {
@@ -75,8 +67,6 @@ const CreateBlog = () => {
 
     if (blogData.category.length === 0) {
       newError.category = "At least one category is required!";
-    } else if (blogData.category.length > 4) {
-      newError.category = "More than 4 categories cannot be selected!";
     }
 
     if (!editMode && blogData.image.length === 0) {
@@ -132,6 +122,14 @@ const CreateBlog = () => {
     setBlogData((prev) => {
       const exists = prev.category.includes(category);
 
+      if (!exists && prev.category.length >= 3) {
+        setError((prev) => ({
+          ...prev,
+          category: "Maximum 3 categories allowed!",
+        }));
+        return prev;
+      }
+
       return {
         ...prev,
         category: exists
@@ -139,8 +137,6 @@ const CreateBlog = () => {
           : [...prev.category, category],
       };
     });
-
-    setError((prev) => ({ ...prev, category: "" }));
   }
 
   function handleImageChange(e) {
@@ -151,13 +147,7 @@ const CreateBlog = () => {
     let imageErrors = [];
     let validNewImages = [];
 
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-      "image/gif",
-      "image/bmp",
-    ];
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
     for (let file of files) {
       if (existingImages.length + validNewImages.length >= MAX_IMAGES) {
@@ -167,7 +157,7 @@ const CreateBlog = () => {
 
       if (!allowedTypes.includes(file.type)) {
         imageErrors.push(
-          `${file.name} format not supported. Allowed: JPEG, PNG, WEBP, GIF, BMP.`,
+          `${file.name} format not supported. Allowed: JPEG, PNG, WEBP.`,
         );
         continue;
       }
@@ -316,7 +306,7 @@ const CreateBlog = () => {
             <input
               type="file"
               multiple
-              accept="image/jpeg,image/png,image/webp,image/gif,image/bmp"
+              accept="image/jpeg,image/png,image/webp"
               className="hidden"
               onChange={handleImageChange}
             />

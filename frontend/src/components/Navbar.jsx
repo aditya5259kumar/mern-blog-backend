@@ -65,11 +65,11 @@ const Navbar = () => {
               ))}
             </nav>
 
-            <div className="flex justify-center items-center gap-8">
+            <div className="flex justify-center items-center gap-4 sm:gap-8">
               {token && (
                 <div className="flex items-center gap-2 overflow-hidden">
                   <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
-                  <span className="text-sm capitalize">{user?.userName}</span>
+                  <span className="text-sm ">@{user?.userName}</span>
                 </div>
               )}
 

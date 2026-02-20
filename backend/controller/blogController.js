@@ -34,35 +34,42 @@ const blog = {
   createBlog: async (req, res) => {
     try {
       const id = req.user.id;
-      let { title, category, content } = req.body;
+      const { title, category, content } = req.body;
 
-      const images = req.files.map((file) => `/uploads/${file.filename}`);
+      if (!title || !content) {
+        return helper.error(res, "title and content are required");
+      }
 
-      // console.log("req.body--------", req.body);
-      // console.log("req.user--------", req.user);
-      // console.log("images--------", images);
+      if (!Array.isArray(category) || category.length === 0) {
+        return helper.error(res, "At least one category is required");
+      }
 
-      if (!title || !content || !category) {
-        return helper.error(res, "title, content, and category is required");
+      if (category.length > 3) {
+        return helper.error(res, "Maximum 3 categories allowed");
+      }
+
+      if (!req.files || req.files.length === 0) {
+        return helper.error(res, "At least one image is required");
       }
 
       const user = await userModel.findById(id);
-
       if (!user) {
-        return helper.error(res, "user not found!");
+        return helper.error(res, "User not found");
       }
 
+      const images = req.files.map((file) => `/uploads/${file.filename}`);
+
       const blogPost = await blogModel.create({
-        title: title,
-        content: content,
-        category: category,
-        images: images,
+        title,
+        content,
+        category,
+        images,
         author: user._id,
       });
 
-      return helper.success(res, "blog created successfully.", blogPost);
+      return helper.success(res, "Blog created successfully.", blogPost);
     } catch (error) {
-      return helper.error(res, "something went wrong!", error.message);
+      return helper.error(res, "Something went wrong!", error.message);
     }
   },
 

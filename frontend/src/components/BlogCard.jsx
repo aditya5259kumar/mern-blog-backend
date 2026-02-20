@@ -20,7 +20,7 @@ const BlogCard = ({ item }) => {
   // console.log(formattedDate);
 
   return (
-    <div className="w-full rounded-2xl group">
+    <div className="w-full rounded-2xl group border">
       <div className="overflow-hidden rounded-lg ">
         <img
           src={`http://localhost:3000${item.images[0]}`}
@@ -29,25 +29,28 @@ const BlogCard = ({ item }) => {
         />
       </div>
       <div className="">
-        <div className="flex items-center space-x-4 my-5">
-          {item.category.map((val) => (
-            <button
-              key={val}
-              className="px-3 py-1 bg-gray-600 rounded-sm text-white text-sm"
-            >
-              {val}
-            </button>
-          ))}
-          <p className="text-gray-600">
-            <span className="">Author</span>{" "}-{" "}
-            {item.author.userName}
+        <div className="flex flex-wrap justify-between gap-y-2 items-center space-x-4 mt-5 mb-3">
+          <p className="text-gray-600 font-semibold">
+            @{item.author.userName}
           </p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-lg mb-2">{item.title}</h4>
+
           <div className="flex items-center space-x-2">
             <HiOutlineCalendar className="text-lg" />
             <span className="text-gray-600">{formattedDate}</span>
+          </div>
+        </div>
+        <div>
+          <h4 className="font-semibold text-xl mb-2 line-clamp-2">{item.title}</h4>
+
+          <div className="flex flex-wrap gap-y-2 items-center space-x-4 my-5">
+            {item.category.map((val) => (
+              <button
+                key={val}
+                className="px-3 py-1 cursor-pointer border-gray-800 bg-gray-700 hover:bg-white  border rounded-sm text-white hover:text-gray-800 font-lg text-sm transition-all duration-200"
+              >
+                {val}
+              </button>
+            ))}
           </div>
         </div>
       </div>
