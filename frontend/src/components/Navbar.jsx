@@ -45,7 +45,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="shadow-lg sticky top-0 left-0 right-0 bg-white z-10">
+      <header className="shadow-md sticky top-0 left-0 right-0 bg-white z-10">
         <div className="container px-8 md:px-20 py-4 mx-auto">
           <div className=" flex items-center justify-between">
             <div className="overflow-hidden relative z-10 cursor-pointer">

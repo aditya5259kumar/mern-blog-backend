@@ -100,7 +100,7 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="my-20">
+    <div className=" my-15">
       <div className="container px-8 xl:px-60 lg:px-40 mx-auto">
         {loading && <p className="text-center">Loading...</p>}
 
@@ -158,7 +158,7 @@ const BlogDetail = () => {
           <img
             src={`http://localhost:3000${currentBlog.images[0]}`}
             alt={currentBlog.title}
-            className="w-full h-60 md:h-100 object-cover "
+            className="w-full h-70 md:h-100 object-cover "
           />
         </div>
 

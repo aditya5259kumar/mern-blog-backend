@@ -75,7 +75,7 @@ const CreateBlog = () => {
 
     if (!blogData.content) {
       newError.content = "Content is required!";
-    } else if (blogData.content.length < 50) {
+    } else if (blogData.content.length < 80) {
       newError.content = "Content must be at least 50 characters long!";
     }
 
@@ -167,18 +167,6 @@ const CreateBlog = () => {
         continue;
       }
 
-      const duplicate = existingImages.some(
-        (img) =>
-          img.name === file.name &&
-          img.size === file.size &&
-          img.lastModified === file.lastModified,
-      );
-
-      if (duplicate) {
-        imageErrors.push(`${file.name} is already uploaded.`);
-        continue;
-      }
-
       validNewImages.push(file);
     }
 
@@ -231,7 +219,6 @@ const CreateBlog = () => {
           Fill in the information below to create your blog post
         </p>
 
-        {/* Title */}
         <div className="my-8">
           <h5 className="text-sm mb-1">
             Blog Title <span className="text-red-700 mb-1">*</span>
@@ -249,7 +236,6 @@ const CreateBlog = () => {
           />
         </div>
 
-        {/* Categories */}
         <div className="my-8">
           <h5 className="text-sm mb-1">
             Blog Category <span className="text-red-700">*</span>
@@ -284,10 +270,9 @@ const CreateBlog = () => {
           </div>
         </div>
 
-        {/* Images */}
         <div className="my-8">
           <h5 className="text-sm mb-1">
-            Blog Images <span className="text-red-700">*</span>
+            Blog Images ( Max 3 )<span className="text-red-700">*</span>
           </h5>
           {error.image && (
             <p className="text-xs text-red-700 mb-3">{error.image}</p>
@@ -335,7 +320,6 @@ const CreateBlog = () => {
           )}
         </div>
 
-        {/* Content */}
         <div className="my-8">
           <h5 className="text-sm mb-1">
             Blog Content <span className="text-red-700">*</span>

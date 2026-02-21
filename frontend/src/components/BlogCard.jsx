@@ -20,7 +20,7 @@ const BlogCard = ({ item }) => {
   // console.log(formattedDate);
 
   return (
-    <div className="w-full rounded-2xl group border">
+    <div className="w-full rounded-2xl group ">
       <div className="overflow-hidden rounded-lg ">
         <img
           src={`http://localhost:3000${item.images[0]}`}

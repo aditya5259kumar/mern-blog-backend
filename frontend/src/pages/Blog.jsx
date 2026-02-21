@@ -32,7 +32,7 @@ const Blog = () => {
         {loading ? (
           <p className="text-center">Loading...</p>
         ) : (
-          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-8 gap-y-16">
+          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-12 gap-y-16">
             {blogs.map((item) => (
               <Link to={`/blog/${item._id}`} key={item._id}>
                 <BlogCard item={item} />

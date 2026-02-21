@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import userModel from "../model/users.js";
 import blogModel from "../model/blogs.js";
 import helper from "../utils/helper.js";
@@ -34,13 +37,20 @@ const blog = {
   createBlog: async (req, res) => {
     try {
       const id = req.user.id;
-      const { title, category, content } = req.body;
+      let { title, category, content } = req.body;
+
+      console.log("RAW CATEGORY:", req.body.category);
+      console.log("TYPE:", typeof req.body.category);
+
+      if (typeof category === "string") {
+        category = [category];
+      }
 
       if (!title || !content) {
         return helper.error(res, "title and content are required");
       }
 
-      if (!Array.isArray(category) || category.length === 0) {
+      if (!category || category.length === 0) {
         return helper.error(res, "At least one category is required");
       }
 
@@ -98,33 +108,123 @@ const blog = {
 
   // -------- delete blog --------
 
+  // deleteBlog: async (req, res) => {
+  //   try {
+  //     const blogId = req.params.id;
+  //     const userId = req.user.id;
+
+  //     const result = await blogModel.deleteOne({
+  //       _id: blogId,
+  //       author: userId,
+  //     });
+
+  //     console.log("result---------", result);
+  //     if (result.deletedCount === 0) {
+  //       helper.error(res, "Blog not found or not authorized!", error);
+  //     }
+
+  //     helper.success(res, "blog deleted successfully.", blogId);
+  //   } catch (error) {
+  //     helper.error(res, "something went wrong!", error);
+  //   }
+  // },
+
   deleteBlog: async (req, res) => {
     try {
       const blogId = req.params.id;
       const userId = req.user.id;
 
-      const result = await blogModel.deleteOne({
+      // 1️⃣ Find the blog first
+      const blog = await blogModel.findOne({
         _id: blogId,
         author: userId,
       });
 
-      console.log("result---------", result);
-      if (result.deletedCount === 0) {
-        helper.error(res, "Blog not found or not authorized!", error);
+      if (!blog) {
+        return helper.error(res, "Blog not found or not authorized!");
       }
 
-      helper.success(res, "blog deleted successfully.", blogId);
+      // 2️⃣ Delete images from filesystem
+      if (blog.images && blog.images.length > 0) {
+        blog.images.forEach((imagePath) => {
+          const fullPath = path.join(process.cwd(), "public", imagePath);
+
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+          }
+        });
+      }
+
+      // 3️⃣ Delete blog from DB
+      await blog.deleteOne();
+
+      return helper.success(res, "Blog deleted successfully.", blogId);
     } catch (error) {
-      helper.error(res, "something went wrong!", error);
+      return helper.error(res, "Something went wrong!", error);
     }
   },
 
   // -------- update blog --------
+  // updateBlog: async (req, res) => {
+  //   try {
+  //     const userId = req.user.id;
+  //     const blogId = req.params.id;
+
+  //     let { title, category, content } = req.body;
+
+  //     const blog = await blogModel.findOne({
+  //       _id: blogId,
+  //       author: userId,
+  //     });
+
+  //     if (!blog) {
+  //       return helper.error(res, "Blog not found!");
+  //     }
+
+  //     if (typeof category === "string") {
+  //       category = [category];
+  //     }
+
+  //     if (!Array.isArray(category) || category.length === 0) {
+  //       return helper.error(res, "At least one category is required");
+  //     }
+
+  //     if (category.length > 3) {
+  //       return helper.error(res, "Maximum 3 categories allowed");
+  //     }
+
+  //     const updateData = {
+  //       title: title !== undefined ? title : blog.title,
+  //       category: category !== undefined ? category : blog.category,
+  //       content: content !== undefined ? content : blog.content,
+  //       images: blog.images,
+  //     };
+
+  //     if (req.files && req.files.length > 0) {
+  //       updateData.images = req.files.map(
+  //         (file) => `/uploads/${file.filename}`,
+  //       );
+  //     }
+
+  //     const blogPost = await blogModel.findOneAndUpdate(
+  //       { _id: blogId, author: userId },
+  //       updateData,
+  //       { new: true },
+  //     );
+
+  //     return helper.success(res, "Blog updated successfully.", blogPost);
+  //   } catch (error) {
+  //     console.error(error); // always log real error
+  //     return helper.error(res, "Something went wrong!", error.message);
+  //   }
+  // },
+
   updateBlog: async (req, res) => {
     try {
       const userId = req.user.id;
       const blogId = req.params.id;
-      const { title, category, content } = req.body;
+
+      let { title, category, content } = req.body;
 
       const blog = await blogModel.findOne({
         _id: blogId,
@@ -135,14 +235,36 @@ const blog = {
         return helper.error(res, "Blog not found!");
       }
 
+      if (typeof category === "string") {
+        category = [category];
+      }
+
+      if (!Array.isArray(category) || category.length === 0) {
+        return helper.error(res, "At least one category is required");
+      }
+
+      if (category.length > 3) {
+        return helper.error(res, "Maximum 3 categories allowed");
+      }
+
       const updateData = {
-        title,
-        category,
-        content,
+        title: title !== undefined ? title : blog.title,
+        category: category !== undefined ? category : blog.category,
+        content: content !== undefined ? content : blog.content,
         images: blog.images,
       };
 
       if (req.files && req.files.length > 0) {
+        if (blog.images && blog.images.length > 0) {
+          blog.images.forEach((imagePath) => {
+            const fullPath = path.join(process.cwd(), "public", imagePath);
+
+            if (fs.existsSync(fullPath)) {
+              fs.unlinkSync(fullPath);
+            }
+          });
+        }
+
         updateData.images = req.files.map(
           (file) => `/uploads/${file.filename}`,
         );
@@ -154,9 +276,9 @@ const blog = {
         { new: true },
       );
 
-      helper.success(res, "Blog updated successfully.", blogPost);
+      return helper.success(res, "Blog updated successfully.", blogPost);
     } catch (error) {
-      helper.error(res, "Something went wrong!", error);
+      return helper.error(res, "Something went wrong!", error.message);
     }
   },
 };

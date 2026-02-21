@@ -45,5 +45,5 @@ export const AVAILABLE_CATEGORIES = [
   "Politics",
   "Environment",
   "Culture",
-  "Personal Development",
+  "Self Development",
 ];
