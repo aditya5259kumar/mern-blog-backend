@@ -23,6 +23,7 @@ const Navbar = () => {
 
   function handleAuth() {
     if (token) {
+      if (!confirm("Are you sure you want to logout?")) return;
       dispatch(logout());
       toast.success("LogOut successfully", { position: "top-center" });
       navigate("/login");

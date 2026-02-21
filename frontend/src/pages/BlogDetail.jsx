@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { blogDetail, deleteBlog } from "../redux/slices/blogSlice";
 import { toast } from "react-toastify";
 import { GoHeart, GoHeartFill } from "react-icons/go";
-import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import {
-  HiOutlinePencilAlt,
   HiOutlinePencil,
   HiOutlineTrash,
   HiDotsVertical,
@@ -51,7 +50,7 @@ const BlogDetail = () => {
     dispatch(blogDetail(id));
   }, [dispatch, id]);
 
-  console.log("currentBlog=====", currentBlog);
+  // console.log("currentBlog=====", currentBlog);
 
   if (!currentBlog) return <p>No blog found</p>;
 
@@ -90,12 +89,14 @@ const BlogDetail = () => {
     currentBlog.author._id === user._id;
 
   function blogDeleteHandler() {
+    if (!confirm("Are you sure you want to delete this blog??")) return;
     dispatch(deleteBlog(id));
     navigate("/blog");
     toast.success("blog deleted successfully.");
   }
 
   function blogEditHandler() {
+    if (!confirm("Are you sure you want to edit this blog?")) return;
     navigate(`/edit-blog/${currentBlog._id}`);
   }
 

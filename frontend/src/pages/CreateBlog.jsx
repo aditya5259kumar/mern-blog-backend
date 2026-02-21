@@ -9,6 +9,8 @@ import { HiLightBulb } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBlog, blogDetail, createBlogs } from "../redux/slices/blogSlice";
 import { useNavigate, useParams } from "react-router";
+import { IoSendSharp } from "react-icons/io5";
+import { GrUpdate } from "react-icons/gr";
 import { toast } from "react-toastify";
 
 const CreateBlog = () => {
@@ -83,6 +85,8 @@ const CreateBlog = () => {
       setError(newError);
       return;
     }
+
+    if (!confirm("Ready to publish this blog?")) return;
 
     const formData = new FormData();
 
@@ -197,6 +201,16 @@ const CreateBlog = () => {
     }));
   }
 
+  function resetForm() {
+    if (!confirm("Are you sure you want to reset blog?")) return;
+    setBlogData({
+      title: "",
+      category: [],
+      image: [],
+      content: "",
+    });
+  }
+
   return (
     <div className="">
       <div className="bg-linear-to-r from-gray-900 to-gray-500 py-10 md:py-20">
@@ -216,7 +230,8 @@ const CreateBlog = () => {
           Blog Details
         </h3>
         <p className="font-semibold text-sm md:text-[16px] text-gray-700 pb-2 mb-8 border-b border-gray-500">
-          Fill in the information below to create your blog post
+          Fill in the information below to {editMode ? "Update" : "create"} your
+          blog post
         </p>
 
         <div className="my-8">
@@ -411,14 +426,7 @@ const CreateBlog = () => {
               </p>
             )}
             <span
-              onClick={() =>
-                setBlogData({
-                  title: "",
-                  category: [],
-                  image: [],
-                  content: "",
-                })
-              }
+              onClick={resetForm}
               className="px-6 mr-4 md:mr-10 py-3 rounded-md bg-gray-100 border border-gray-300 text-gray-600"
             >
               Reset
@@ -427,7 +435,19 @@ const CreateBlog = () => {
               type="submit"
               className="px-6 py-3 rounded-md bg-gray-800 text-white"
             >
-              {loading ? "loading..." : editMode ? "Update" : "Publish"}
+              {loading ? (
+                "loading..."
+              ) : editMode ? (
+                <span className="flex items-center gap-2">
+                  Update
+                  <GrUpdate className="text-base" />
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  Publish
+                  <IoSendSharp />
+                </span>
+              )}
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -57,7 +57,10 @@ const ContactUs = () => {
           If you are going to use a passage.
         </p>
         <p className="text-gray-500">
-          You can reach me at: <span className="font-semibold text-gray-800">aditya5259kumar@gmail.com</span>
+          You can reach me at:{" "}
+          <span className="font-semibold text-gray-800">
+            aditya5259kumar@gmail.com
+          </span>
         </p>
         <form action="" onSubmit={handlesubmit} className="my-7">
           {error.name && (
