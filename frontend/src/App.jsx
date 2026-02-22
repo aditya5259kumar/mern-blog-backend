@@ -8,6 +8,8 @@ import CreateBlog from "./pages/createBlog";
 import { useSelector } from "react-redux";
 import BlogDetail from "./pages/BlogDetail";
 import ContactUs from "./pages/ContactUs";
+import Author from "./pages/Author";
+import AuthorDetail from "./pages/AuthorDetail";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
@@ -16,10 +18,13 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<ContactUs />} />
 
+        <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
+
+        <Route path="/author" element={<Author />} />
+        <Route path="/authors-detail" element={<AuthorDetail />} />
 
         <Route
           path="/login"
@@ -40,7 +45,6 @@ const App = () => {
           path="/edit-blog/:id"
           element={token ? <CreateBlog /> : <Navigate to="/login" replace />}
         />
-
       </Routes>
       <Footer />
     </>

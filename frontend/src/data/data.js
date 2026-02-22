@@ -4,10 +4,6 @@ export const NAVBMENU = [
     href: "/",
   },
   {
-    name: "About",
-    href: "/",
-  },
-  {
     name: "Blog",
     href: "/blog",
   },
@@ -18,6 +14,10 @@ export const NAVBMENU = [
   {
     name: "Categories",
     href: "/",
+  },
+  {
+    name: "Authors",
+    href: "/author",
   },
   {
     name: "Contacts",

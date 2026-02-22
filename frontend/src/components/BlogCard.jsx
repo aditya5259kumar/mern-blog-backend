@@ -46,7 +46,7 @@ const BlogCard = ({ item }) => {
             {item.category.map((val) => (
               <button
                 key={val}
-                className="px-3 py-1 cursor-pointer border-gray-800 bg-gray-700 hover:bg-white  border rounded-sm text-white hover:text-gray-800 font-lg text-sm transition-all duration-200"
+                className="shadow-md px-3 py-1 cursor-pointer border-gray-800 bg-gray-700 hover:bg-white  border rounded-sm text-white hover:text-gray-800 font-lg text-sm transition-all duration-200"
               >
                 {val}
               </button>

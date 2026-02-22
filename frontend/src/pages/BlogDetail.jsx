@@ -61,19 +61,18 @@ const BlogDetail = () => {
     return <p>loading...</p>;
   }
 
-  const createdDate = currentBlog.createdAt;
-
-  const date = new Date(createdDate);
-
-  const formattedDate = date
+const formatDate = (dateString) => {
+  return new Date(dateString)
     .toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
     })
     .replace(",", "");
+};
 
-  // console.log(formattedDate);
+const formattedCreatedDate = formatDate(currentBlog.createdAt);
+const formattedUpdatedDate = formatDate(currentBlog.updatedAt);
 
   // console.log("  currentLoggedInUser----",  user._id)
   // console.log("  current blog author id",  currentBlog.author._id)
@@ -107,7 +106,7 @@ const BlogDetail = () => {
 
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-200">
           <span className="text-lg font-medium text-gray-500">
-            {formattedDate}
+            {formattedCreatedDate}
           </span>
 
           {isAuthor && (
@@ -120,16 +119,16 @@ const BlogDetail = () => {
               </button>
 
               {blogSetting && (
-                <div className="absolute right-5 top-10 w-36 bg-white rounded-lg border border-gray-200 shadow-2xl  z-8">
+                <div className="absolute right-5 top-10 w-36 bg-gray-50 rounded-lg  shadow-xl z-8">
                   <button
                     onClick={blogDeleteHandler}
-                    className="w-full px-4 py-2.5 text-sm border-b font-medium border-gray-200 text-red-700 transition-all flex items-center justify-between gap-2"
+                    className="cursor-pointer w-full px-4 py-2.5 text-sm border-b font-medium border-gray-200 text-red-700 transition-all flex items-center justify-between gap-2"
                   >
                     Delete <HiOutlineTrash className="text-lg" />
                   </button>
                   <button
                     onClick={blogEditHandler}
-                    className="w-full px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all flex items-center justify-between gap-2 border-t border-gray-100"
+                    className="cursor-pointer w-full px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all flex items-center justify-between gap-2 border-t border-gray-100"
                   >
                     Edit <HiOutlinePencil className="text-lg" />
                   </button>
@@ -151,7 +150,7 @@ const BlogDetail = () => {
             </h4>
           </div>
           <span className="block text-gray-500 lg:text-lg font-medium">
-            ( Updated On: {formattedDate} )
+            ( Updated On: {formattedUpdatedDate} )
           </span>
         </div>
 

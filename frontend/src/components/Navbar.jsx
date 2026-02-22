@@ -17,7 +17,7 @@ const Navbar = () => {
   }
 
   const { token } = useSelector((state) => state.auth);
-  const { user, loading, error } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
