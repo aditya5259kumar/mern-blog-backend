@@ -1,12 +1,12 @@
-// import BlogCard from "../components/BlogCard";
 import { useEffect } from "react";
 import { GoHeartFill } from "react-icons/go";
 // import { HiOutlineCalendar } from "react-icons/hi";
 import authorImg from "../assets/author.jpg";
 // import imgsci from "../assets/demo.jpg";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { authorDetail } from "../redux/slices/authorSlice";
+import BlogCard from "../components/BlogCard";
 
 const AuthorDetail = () => {
   const { id } = useParams();
@@ -23,13 +23,11 @@ const AuthorDetail = () => {
     dispatch(authorDetail(id));
   }, [dispatch, id]);
 
-  // console.log("singleAuthor==========>", singleAuthor);
+  console.log("singleAuthor==========>", singleAuthor);
 
-  if (!singleAuthor) return <p>No blog found</p>;
+  if (loading) return <p>Loading...</p>;
 
-  if (loading) {
-    return <p>loading...</p>;
-  }
+  if (!singleAuthor.author) return <p>Author not found</p>;
 
   const formatDate = (dateString) => {
     return new Date(dateString)
@@ -41,7 +39,9 @@ const AuthorDetail = () => {
       .replace(",", "");
   };
 
-  const joinedDate = formatDate(singleAuthor.createdAt);
+  const joinedDate = formatDate(singleAuthor.author.createdAt);
+
+  console.log("singleAuthor.blogs-------------", singleAuthor.blogs);
 
   return (
     <div className="py-20 bg-gray-50">
@@ -57,16 +57,17 @@ const AuthorDetail = () => {
             <div>
               <div>
                 <h4 className="text-4xl font-bold text-gray-800 capitalize">
-                  {singleAuthor.userName}
+                  {singleAuthor.author.userName}
                 </h4>
                 <p className="text-gray-400 text-xl font-semibold">
-                  @{singleAuthor.userName}
+                  @{singleAuthor.author.userName}
                 </p>
               </div>
 
               <p className="text-gray-500 mt-6">Member since {joinedDate}</p>
               <p className="text-2xl mt-1 font-medium text-gray-800">
-                Published Blogs : <span className="font-bold">13</span>
+                Published Blogs :{" "}
+                <span className="font-bold">{singleAuthor.totalBlogs}</span>
               </p>
               <p className="text-sm mt-1 mb-6 text-gray-500">
                 Total <span className="mx-1 font-medium">2343</span> likes
@@ -88,8 +89,16 @@ const AuthorDetail = () => {
         </div>
 
         <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">
-          {singleAuthor.userName}'s published blogs
+          {singleAuthor.author.userName}
+          's published blogs
         </h4>
+        <div className="container mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+          {singleAuthor.blogs.map((item) => (
+            <Link to={`/blog/${item._id}`}>
+              <BlogCard key={item._id} item={item} />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

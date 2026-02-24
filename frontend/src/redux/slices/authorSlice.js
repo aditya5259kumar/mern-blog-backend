@@ -23,7 +23,7 @@ export const authorDetail = createAsyncThunk(
       const response = await axios.get(
         `http://localhost:3000/api/author/${id}`,
       );
-      //   console.log("response.data---------->", response.data);
+        // console.log("response.data---------->", response.data);
       return response.data.data;
     } catch (error) {
       thunkAPI.rejectWithValue(
@@ -37,7 +37,11 @@ const authorSlice = createSlice({
   name: "author",
   initialState: {
     authors: [],
-    singleAuthor: null,
+    singleAuthor: {
+      author: null,
+      blogs: [],
+      totalBlogs: null,
+    },
     loading: false,
     error: null,
   },
@@ -49,7 +53,7 @@ const authorSlice = createSlice({
         state.loading = true;
       })
       .addCase(allAuthors.fulfilled, (state, action) => {
-        state.authors = action.payload
+        state.authors = action.payload;
         state.loading = false;
       })
       .addCase(allAuthors.rejected, (state, action) => {
@@ -63,7 +67,7 @@ const authorSlice = createSlice({
         state.loading = true;
       })
       .addCase(authorDetail.fulfilled, (state, action) => {
-        state.singleAuthor = action.payload
+        state.singleAuthor = action.payload;
         state.loading = false;
       })
       .addCase(authorDetail.rejected, (state, action) => {

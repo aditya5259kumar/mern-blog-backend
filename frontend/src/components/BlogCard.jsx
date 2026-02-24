@@ -5,7 +5,9 @@ const BlogCard = ({ item }) => {
   // console.log("item.author", item.author.userName);
   // console.log("item.images", item.images);
 
-  const createdDate = item.createdAt;
+  if (!item) return null;
+
+  const createdDate = item?.createdAt;
 
   const date = new Date(createdDate);
 
@@ -31,7 +33,7 @@ const BlogCard = ({ item }) => {
       <div className="">
         <div className="flex flex-wrap justify-between gap-y-2 items-center space-x-4 mt-5 mb-3">
           <p className="text-gray-600 font-semibold">
-            @{item.author.userName}
+            @{item.author?.userName}
           </p>
 
           <div className="flex items-center space-x-2">

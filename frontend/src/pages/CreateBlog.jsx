@@ -325,7 +325,7 @@ const CreateBlog = () => {
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="text-red-600 p-1 cursor-pointer hover:bg-red-200 transition-all rounded"
+                    className="text-red-600 p-1 cursor-pointer"
                   >
                     <HiTrash />
                   </button>

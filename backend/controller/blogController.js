@@ -306,7 +306,19 @@ const blog = {
         .findOne({ _id: authorId })
         .select("-password -email");
 
-      helper.success(res, "author detail fetched successfully!", authorDetail);
+      if (!authorDetail) {
+        helper.error(res, "author did not exist!", error);
+      }
+
+      const blogs = await blogModel
+        .find({ author: authorId })
+        .populate("author", "userName");
+
+      helper.success(res, "author detail fetched successfully!", {
+        author: authorDetail,
+        blogs,
+        totalBlogs: blogs.length,
+      });
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }
