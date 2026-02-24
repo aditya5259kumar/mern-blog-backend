@@ -12,7 +12,7 @@ const Authors = () => {
     dispatch(allAuthors());
   }, [dispatch]);
 
-  // console.log("author----", authors);
+  console.log("author----", authors);
 
   return (
     <div className="py-20">

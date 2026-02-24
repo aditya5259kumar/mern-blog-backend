@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
 import { NAVBMENU } from "../data/data";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/slices/authSlice";
-import { toast } from "react-toastify";
-import pfp from "../assets/defaultUser.jpg";
 import { myProfile } from "../redux/slices/userSlice";
+import defaultUser from "../assets/defaultUser.jpg";
 
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
@@ -18,19 +16,8 @@ const Navbar = () => {
 
   const { token } = useSelector((state) => state.auth);
   const { user, loading } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  function handleAuth() {
-    if (token) {
-      if (!confirm("Are you sure you want to logout?")) return;
-      dispatch(logout());
-      toast.success("LogOut successfully", { position: "top-center" });
-      navigate("/login");
-    } else {
-      navigate("/login");
-    }
-  }
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (token) {
@@ -68,22 +55,24 @@ const Navbar = () => {
 
             <div className="flex justify-center items-center gap-4 sm:gap-8">
               {token && (
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
-                  <span className="text-sm ">@{user?.userName}</span>
-                </div>
+                <Link to="profile" className="flex items-center gap-1 overflow-hidden">
+                  <img src={
+                                  user.profilePhoto
+                                    ? `http://localhost:3000${user.profilePhoto}`
+                                    : defaultUser
+                                } alt="" className="w-10 h-10 rounded-full" />
+                  <span className="text-sm font-medium text-gray-800">
+                    @{user?.userName}
+                  </span>
+                </Link>
               )}
 
-              {loading ? (
-                "loading..."
-              ) : (
-                <button
-                  onClick={handleAuth}
-                  className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 hidden md:block rounded-md px-6 py-2 text-white font-medium"
-                >
-                  <span className="">{token ? "Log Out" : "Log In"}</span>
-                </button>
-              )}
+              <Link
+                to="contact"
+                className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
+              >
+                Contact
+              </Link>
 
               <div
                 onClick={handleSideBar}
@@ -117,12 +106,12 @@ const Navbar = () => {
                 </Link>
               ))}
             </nav>
-            <button
-              onClick={handleAuth}
+            <Link
+              to="contact"
               className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
             >
-              <span>{token ? "Log Out" : "Log In"}</span>
-            </button>
+              Contact
+            </Link>
           </div>
         )}
       </header>

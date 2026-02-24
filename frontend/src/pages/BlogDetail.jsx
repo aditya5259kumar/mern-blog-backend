@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { blogDetail, deleteBlog } from "../redux/slices/blogSlice";
 import { toast } from "react-toastify";
@@ -74,13 +74,6 @@ const BlogDetail = () => {
   const formattedCreatedDate = formatDate(currentBlog.createdAt);
   const formattedUpdatedDate = formatDate(currentBlog.updatedAt);
 
-  // console.log("  currentLoggedInUser----",  user._id)
-  // console.log("  current blog author id",  currentBlog.author._id)
-
-  // if (currentBlog.author._id === user._id) {
-  //   console.log("my blog=============================================");
-  // }
-
   const isAuthor =
     currentBlog &&
     user &&
@@ -98,6 +91,14 @@ const BlogDetail = () => {
     if (!confirm("Are you sure you want to edit this blog?")) return;
     navigate(`/edit-blog/${currentBlog._id}`);
   }
+
+  // function authorProfileHandler() {
+  //   navigate(`author/${currentBlog.author?._id}`);
+  // }
+
+//   function authorProfileHandler() {
+//   navigate(`/author/${currentBlog.author?._id}`);
+// }
 
   return (
     <div className=" my-15">
@@ -142,13 +143,16 @@ const BlogDetail = () => {
           {currentBlog.title}
         </h1>
 
-        <div className="flex flex-wrap gap-2 mt-6 mb-7  items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 mt-4 mb-5  items-center justify-between">
+          <Link
+            to={`/author/${currentBlog.author?._id}`}
+            className="py-2 px-4 rounded-2xl transition-all flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+          >
             <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
             <h4 className=" text-center font-semibold text-lg">
               @{currentBlog.author.userName}
             </h4>
-          </div>
+          </Link>
           <span className="block text-gray-500 lg:text-lg font-medium">
             ( Updated On: {formattedUpdatedDate} )
           </span>

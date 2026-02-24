@@ -19,10 +19,10 @@ export const NAVBMENU = [
     name: "Authors",
     href: "/author",
   },
-  {
-    name: "Contacts",
-    href: "/contact",
-  },
+  // {
+  //   name: "Contacts",
+  //   href: "/contact",
+  // },
 ];
 
 export const AVAILABLE_CATEGORIES = [
