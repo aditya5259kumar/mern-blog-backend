@@ -61,18 +61,18 @@ const BlogDetail = () => {
     return <p>loading...</p>;
   }
 
-const formatDate = (dateString) => {
-  return new Date(dateString)
-    .toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-    .replace(",", "");
-};
+  const formatDate = (dateString) => {
+    return new Date(dateString)
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(",", "");
+  };
 
-const formattedCreatedDate = formatDate(currentBlog.createdAt);
-const formattedUpdatedDate = formatDate(currentBlog.updatedAt);
+  const formattedCreatedDate = formatDate(currentBlog.createdAt);
+  const formattedUpdatedDate = formatDate(currentBlog.updatedAt);
 
   // console.log("  currentLoggedInUser----",  user._id)
   // console.log("  current blog author id",  currentBlog.author._id)

@@ -33,4 +33,10 @@ router.put(
   blogController.updateBlog,
 );
 
+// all authors
+router.get("/all-authors", blogController.allAuthors);
+
+// authors detail
+router.get("/author/:id", blogController.singleAuthorDetail);
+
 export default router;

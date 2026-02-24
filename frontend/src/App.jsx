@@ -10,6 +10,7 @@ import BlogDetail from "./pages/BlogDetail";
 import ContactUs from "./pages/ContactUs";
 import Author from "./pages/Author";
 import AuthorDetail from "./pages/AuthorDetail";
+import Profile from "./pages/profile";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
@@ -19,12 +20,13 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/profile" element={<Profile />} />
 
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
 
         <Route path="/author" element={<Author />} />
-        <Route path="/authors-detail" element={<AuthorDetail />} />
+        <Route path="/author/:id" element={<AuthorDetail />} />
 
         <Route
           path="/login"

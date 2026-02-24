@@ -1,7 +1,19 @@
-import React from "react";
+import { useEffect } from "react";
+import { Link } from "react-router";
+import { allAuthors } from "../redux/slices/authorSlice";
 import AuthorCard from "../components/AuthorCard";
+import { useDispatch, useSelector } from "react-redux";
 
 const Authors = () => {
+  const { authors } = useSelector((state) => state.author);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(allAuthors());
+  }, [dispatch]);
+
+  // console.log("author----", authors);
+
   return (
     <div className="py-20">
       <div className="container px-8 md:px-20 mx-auto">
@@ -15,15 +27,17 @@ const Authors = () => {
             Meet our writers and discover their unique perspectives on the
             world.
           </p>
-          <button className="bg-gray-800 text-white px-6 py-3 rounded-md">
+          <Link
+            to="/blog"
+            className="bg-gray-800 text-white px-6 py-3 rounded-md"
+          >
             View All Blogs
-          </button>
+          </Link>
 
           <div className="mt-15 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-            <AuthorCard />
-            <AuthorCard />
-            <AuthorCard />
-            <AuthorCard />
+            {authors.map((author) => (
+              <AuthorCard key={author._id} author={author} />
+            ))}
           </div>
         </div>
       </div>

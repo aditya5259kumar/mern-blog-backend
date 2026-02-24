@@ -281,6 +281,36 @@ const blog = {
       return helper.error(res, "Something went wrong!", error.message);
     }
   },
+
+  // -------- all authors --------
+  allAuthors: async (req, res) => {
+    try {
+      const authorIds = await blogModel.distinct("author");
+
+      const authors = await userModel
+        .find({ _id: { $in: authorIds } })
+        .select("-password -email");
+
+      helper.success(res, "all authors fetched successfully!", authors);
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- author detail --------
+  singleAuthorDetail: async (req, res) => {
+    try {
+      const authorId = req.params.id;
+
+      const authorDetail = await userModel
+        .findOne({ _id: authorId })
+        .select("-password -email");
+
+      helper.success(res, "author detail fetched successfully!", authorDetail);
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
 };
 
 export default blog;
