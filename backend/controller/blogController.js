@@ -108,33 +108,11 @@ const blog = {
 
   // -------- delete blog --------
 
-  // deleteBlog: async (req, res) => {
-  //   try {
-  //     const blogId = req.params.id;
-  //     const userId = req.user.id;
-
-  //     const result = await blogModel.deleteOne({
-  //       _id: blogId,
-  //       author: userId,
-  //     });
-
-  //     console.log("result---------", result);
-  //     if (result.deletedCount === 0) {
-  //       helper.error(res, "Blog not found or not authorized!", error);
-  //     }
-
-  //     helper.success(res, "blog deleted successfully.", blogId);
-  //   } catch (error) {
-  //     helper.error(res, "something went wrong!", error);
-  //   }
-  // },
-
   deleteBlog: async (req, res) => {
     try {
       const blogId = req.params.id;
       const userId = req.user.id;
 
-      // 1️⃣ Find the blog first
       const blog = await blogModel.findOne({
         _id: blogId,
         author: userId,
@@ -144,7 +122,6 @@ const blog = {
         return helper.error(res, "Blog not found or not authorized!");
       }
 
-      // 2️⃣ Delete images from filesystem
       if (blog.images && blog.images.length > 0) {
         blog.images.forEach((imagePath) => {
           const fullPath = path.join(process.cwd(), "public", imagePath);
@@ -155,7 +132,6 @@ const blog = {
         });
       }
 
-      // 3️⃣ Delete blog from DB
       await blog.deleteOne();
 
       return helper.success(res, "Blog deleted successfully.", blogId);
@@ -319,6 +295,29 @@ const blog = {
         blogs,
         totalBlogs: blogs.length,
       });
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- blog with category --------
+  blogCategory: async (req, res) => {
+    try {
+      const category = req.params.category;
+
+      const blogs = await blogModel
+        .find({ category: category })
+        .populate("author", "userName");
+
+      if (!blogs) {
+        helper.error(res, "no blog with this category!", error);
+      }
+
+      helper.success(
+        res,
+        "blogs with this category fetched successfully!",
+        blogs,
+      );
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }

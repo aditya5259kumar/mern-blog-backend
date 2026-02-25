@@ -23,7 +23,7 @@ const AuthorDetail = () => {
     dispatch(authorDetail(id));
   }, [dispatch, id]);
 
-  console.log("singleAuthor==========>", singleAuthor);
+  // console.log("singleAuthor==========>", singleAuthor);
 
   if (loading) return <p>Loading...</p>;
 
@@ -61,9 +61,10 @@ const AuthorDetail = () => {
             <div>
               <div>
                 <h4 className="text-4xl my-2 font-semibold text-gray-800 capitalize">
-                  {singleAuthor?.author?.name
-                  ? `singleAuthor?.author?.name`
-                  : singleAuthor?.author?.userName}
+                  {!singleAuthor?.author?.name ||
+                  singleAuthor.author.name === "null"
+                    ? singleAuthor.author.userName
+                    : singleAuthor.author.name}
                 </h4>
                 <p className="text-gray-400 text-xl font-semibold">
                   @{singleAuthor.author.userName}
@@ -71,9 +72,10 @@ const AuthorDetail = () => {
               </div>
 
               <p className="text-gray-500 mt-2 leading-relaxed max-w-3xl">
-                {singleAuthor?.author?.bio
-                  ? `singleAuthor?.author?.bio`
-                  : "No Bio Yet."}
+                {!singleAuthor?.author?.bio ||
+                singleAuthor.author.bio === "null"
+                  ? "No Bio Yet."
+                  : singleAuthor.author.bio}
               </p>
 
               <p className="text-gray-800 my-6">

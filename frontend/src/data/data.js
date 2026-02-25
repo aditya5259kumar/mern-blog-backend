@@ -13,7 +13,7 @@ export const NAVBMENU = [
   },
   {
     name: "Categories",
-    href: "/",
+    href: "/category",
   },
   {
     name: "Authors",

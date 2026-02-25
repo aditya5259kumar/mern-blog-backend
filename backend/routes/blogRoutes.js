@@ -39,4 +39,7 @@ router.get("/all-authors", blogController.allAuthors);
 // authors detail
 router.get("/author/:id", blogController.singleAuthorDetail);
 
+// authors detail
+router.get("/category/:category", blogController.blogCategory);
+
 export default router;

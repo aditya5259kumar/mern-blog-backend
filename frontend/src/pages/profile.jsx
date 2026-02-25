@@ -18,7 +18,7 @@ const MyProfile = () => {
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  // console.log("user----------------", user);
+  console.log("user----------------", user);
   // console.log("blogs----------------", blogs);
   // console.log("totalBlogs----------------", totalBlogs);
 
@@ -28,6 +28,7 @@ const MyProfile = () => {
   const [formData, setFormData] = useState(null);
   const [originalData, setOriginalData] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   useEffect(() => {
     dispatch(myProfile());
@@ -36,12 +37,12 @@ const MyProfile = () => {
   useEffect(() => {
     if (user) {
       setFormData(user);
-      setOriginalData(user);
+      setOriginalData({ ...user });
     }
   }, [user]);
 
   const handleEdit = () => {
-    setOriginalData(formData);
+    setOriginalData({ ...formData });
     setIsEditing(true);
   };
 
@@ -60,16 +61,12 @@ const MyProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    if (file) {
-      setSelectedFile(file);
+    if (!file) return;
 
-      const preview = URL.createObjectURL(file);
+    setSelectedFile(file);
 
-      setFormData({
-        ...formData,
-        profilePhoto: preview,
-      });
-    }
+    const preview = URL.createObjectURL(file);
+    setPreviewImage(preview);
   };
 
   const handleUpdate = () => {
@@ -83,6 +80,8 @@ const MyProfile = () => {
     }
 
     dispatch(updateProfile(data));
+    setPreviewImage(null);
+    setSelectedFile(null);
     setIsEditing(false);
   };
 
@@ -129,9 +128,11 @@ const MyProfile = () => {
           >
             <img
               src={
-                formData.profilePhoto
-                  ? `http://localhost:3000${formData.profilePhoto}`
-                  : defaultUser
+                previewImage
+                  ? previewImage
+                  : formData.profilePhoto
+                    ? `http://localhost:3000${formData.profilePhoto}`
+                    : defaultUser
               }
               alt="profile"
               className="w-50 h-50 md:h-70 md:w-70 rounded-2xl object-cover"
@@ -166,7 +167,7 @@ const MyProfile = () => {
               />
             ) : (
               <h4 className="text-4xl font-semibold text-gray-800 capitalize">
-                {formData.name ? formData.name : formData.userName}
+                {formData.name !==null ? formData.name : formData.userName}
               </h4>
             )}
 
@@ -186,7 +187,7 @@ const MyProfile = () => {
               />
             ) : (
               <p className="text-gray-500 mt-2 leading-relaxed max-w-3xl">
-                {formData.bio ? formData.bio : "No Bio yet"}
+                {formData.bio !==null ? formData.bio : "No Bio yet"}
               </p>
             )}
 

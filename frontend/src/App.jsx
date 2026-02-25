@@ -11,6 +11,8 @@ import ContactUs from "./pages/ContactUs";
 import Author from "./pages/Author";
 import AuthorDetail from "./pages/AuthorDetail";
 import Profile from "./pages/profile";
+import Home from "./pages/Home";
+import Category from "./pages/Category";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
@@ -19,6 +21,10 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/category" element={<Category />} />
+
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/profile" element={<Profile />} />
 

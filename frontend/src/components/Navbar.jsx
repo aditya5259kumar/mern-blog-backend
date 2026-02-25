@@ -31,14 +31,23 @@ const Navbar = () => {
     return <p>loading...</p>;
   }
 
+  if (!user) return null;
+
   return (
     <>
       <header className="shadow-md sticky top-0 left-0 right-0 bg-white z-10">
         <div className="container px-8 md:px-20 py-4 mx-auto">
           <div className=" flex items-center justify-between">
-            <div className="overflow-hidden relative z-10 cursor-pointer">
-              <img src={black_beog_logo} alt="beog-logo" className="h-10" />
-            </div>
+            <Link
+              to="/"
+              className="overflow-hidden relative z-10 cursor-pointer"
+            >
+              <img
+                src={black_beog_logo}
+                alt="beog-logo"
+                className=" h-8 md:h-10"
+              />
+            </Link>
 
             <nav className="hidden md:flex font-medium gap-8 items-center justify-center">
               {NAVBMENU.map((value, index) => (
@@ -55,13 +64,20 @@ const Navbar = () => {
 
             <div className="flex justify-center items-center gap-4 sm:gap-8">
               {token && (
-                <Link to="profile" className="flex items-center gap-1 overflow-hidden">
-                  <img src={
-                                  user.profilePhoto
-                                    ? `http://localhost:3000${user.profilePhoto}`
-                                    : defaultUser
-                                } alt="" className="w-10 h-10 rounded-full" />
-                  <span className="text-sm font-medium text-gray-800">
+                <Link
+                  to="profile"
+                  className="flex items-center gap-1 overflow-hidden"
+                >
+                  <img
+                    src={
+                      user.profilePhoto
+                        ? `http://localhost:3000${user.profilePhoto}`
+                        : defaultUser
+                    }
+                    alt=""
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                  <span className="hidden md:block text-sm font-medium text-gray-800">
                     @{user?.userName}
                   </span>
                 </Link>
@@ -69,7 +85,7 @@ const Navbar = () => {
 
               <Link
                 to="contact"
-                className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
+                className="hidden md:block cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
               >
                 Contact
               </Link>
@@ -78,7 +94,7 @@ const Navbar = () => {
                 onClick={handleSideBar}
                 className="p-1.5 block md:hidden bg-black text-white rounded-lg cursor-pointer"
               >
-                <HiOutlineMenuAlt4 className="text-3xl " />
+                <HiOutlineMenuAlt4 className="text-2xl md:text-3xl " />
               </div>
             </div>
           </div>

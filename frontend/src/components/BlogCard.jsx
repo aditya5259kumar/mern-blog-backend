@@ -27,7 +27,7 @@ const BlogCard = ({ item }) => {
         <img
           src={`http://localhost:3000${item.images[0]}`}
           alt={item.title}
-          className=" h-50 md:h-60  w-full object-cover group-hover:scale-110 transition-all ease-in-out duration-300"
+          className=" h-50 md:h-60 w-full object-cover group-hover:scale-110 transition-all ease-in-out duration-300"
         />
       </div>
       <div className="">

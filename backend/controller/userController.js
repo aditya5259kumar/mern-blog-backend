@@ -10,14 +10,12 @@ const userController = {
     try {
       const userId = req.user.id;
 
-      // Get user info
       const user = await userModel.findById(userId).select("-password");
 
       if (!user) {
         return helper.error(res, "User not found.");
       }
 
-      // Get blogs created by this user
       const blogs = await blogModel
         .find({ author: userId })
         .populate("author", "userName profilePhoto");
@@ -50,9 +48,7 @@ const userController = {
         profilePhoto: user.profilePhoto,
       };
 
-      // If new profile image uploaded
       if (req.file) {
-        // Delete old image
         if (user.profilePhoto) {
           const fullPath = path.join(
             process.cwd(),
@@ -65,7 +61,6 @@ const userController = {
           }
         }
 
-        // Replace with new image
         updateData.profilePhoto = `/uploads/${req.file.filename}`;
       }
 

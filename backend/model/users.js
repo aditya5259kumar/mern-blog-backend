@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
-      default: null,
+      default: "No Bio Yet.",
     },
   },
   { timestamps: true },

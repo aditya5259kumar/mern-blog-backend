@@ -17,6 +17,27 @@ export const readBlogs = createAsyncThunk("blog", async (_, thunkAPI) => {
   }
 });
 
+// readBlogs by category
+export const blogCategory = createAsyncThunk(
+  "blogCategory",
+  async (category, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/category/${category}`,
+      );
+
+      // console.log("response.data-------", response.data);
+
+      // console.log("response.data.data-------", response.data.data);
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "something went Wrong",
+      );
+    }
+  },
+);
+
 // read single blog
 export const blogDetail = createAsyncThunk(
   "blog-detail",
@@ -98,7 +119,7 @@ export const deleteBlog = createAsyncThunk(
 //update blog
 export const updateBlog = createAsyncThunk(
   "updateBlog",
-  async ({id, blogData}, thunkAPI) => {
+  async ({ id, blogData }, thunkAPI) => {
     try {
       const token = localStorage.getItem("token");
       const config = {
@@ -126,6 +147,7 @@ const blogSlice = createSlice({
   name: "blog",
   initialState: {
     blogs: [],
+    blogsWithSameCategory: [],
     currentBlog: null,
     loading: false,
     error: null,
@@ -143,6 +165,20 @@ const blogSlice = createSlice({
         state.error = null;
       })
       .addCase(readBlogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // blogs with same category---------
+      .addCase(blogCategory.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(blogCategory.fulfilled, (state, action) => {
+        state.blogsWithSameCategory = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(blogCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
