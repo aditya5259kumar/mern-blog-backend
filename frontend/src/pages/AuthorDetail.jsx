@@ -54,7 +54,7 @@ const AuthorDetail = () => {
                   ? `http://localhost:3000${singleAuthor?.author?.profilePhoto}`
                   : defaultUser
               }
-              alt=""
+              alt="pfp"
               className="w-50 h-50 md:h-70 md:w-70 rounded-2xl object-cover"
             />
 

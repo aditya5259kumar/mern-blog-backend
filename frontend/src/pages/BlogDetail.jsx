@@ -11,7 +11,8 @@ import {
   HiOutlineTrash,
   HiDotsVertical,
 } from "react-icons/hi";
-import pfp from "../assets/defaultUser.jpg";
+import defaultUser from "../assets/defaultUser.jpg";
+
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -148,7 +149,11 @@ const BlogDetail = () => {
             to={`/author/${currentBlog.author?._id}`}
             className="py-2 px-4 rounded-2xl transition-all flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
           >
-            <img src={pfp} alt="" className="w-10 h-10 rounded-full" />
+            <img  src={
+                            currentBlog?.author?.profilePhoto
+                              ? `http://localhost:3000${currentBlog?.author?.profilePhoto}`
+                              : defaultUser
+                          } alt="" className="w-10 h-10 object-cover rounded-full" />
             <h4 className=" text-center font-semibold text-lg">
               @{currentBlog.author.userName}
             </h4>

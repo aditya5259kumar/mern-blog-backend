@@ -4,19 +4,14 @@ import { myProfile, updateProfile } from "../redux/slices/userSlice";
 import { IoMdAdd } from "react-icons/io";
 import { GoHeartFill } from "react-icons/go";
 import BlogCard from "../components/BlogCard";
-import { Link, useNavigate } from "react-router";
-import { logout } from "../redux/slices/authSlice";
+import { Link } from "react-router";
 import defaultUser from "../assets/defaultUser.jpg";
-import { toast } from "react-toastify";
 
 const MyProfile = () => {
   const dispatch = useDispatch();
   const { user, blogs, totalBlogs, loading, error } = useSelector(
     (state) => state.user,
   );
-
-  const { token } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
 
   console.log("user----------------", user);
   // console.log("blogs----------------", blogs);
@@ -109,15 +104,6 @@ const MyProfile = () => {
 
   const joinedDate = formatDate(user.createdAt);
 
-  function logOutHandler() {
-    if (token) {
-      if (!confirm("Are you sure you want to logout?")) return;
-      dispatch(logout());
-      toast.success("LogOut successfully", { position: "top-center" });
-      navigate("/login");
-    }
-  }
-
   return (
     <div className="py-20 bg-gray-50">
       <div className="container px-8 xl:px-60 lg:px-40 mx-auto">
@@ -167,7 +153,7 @@ const MyProfile = () => {
               />
             ) : (
               <h4 className="text-4xl font-semibold text-gray-800 capitalize">
-                {formData.name !==null ? formData.name : formData.userName}
+                {formData.name !== null ? formData.name : formData.userName}
               </h4>
             )}
 
@@ -187,7 +173,7 @@ const MyProfile = () => {
               />
             ) : (
               <p className="text-gray-500 mt-2 leading-relaxed max-w-3xl">
-                {formData.bio !==null ? formData.bio : "No Bio yet"}
+                {formData.bio !== null ? formData.bio : "No Bio yet"}
               </p>
             )}
 
@@ -208,15 +194,9 @@ const MyProfile = () => {
                 <>
                   <button
                     onClick={handleEdit}
-                    className="border-2 border-gray-800 font-medium text-gray-800 px-5 py-2 cursor-pointer rounded-md"
+                    className="border-2 bg-gray-800 text-white px-5 py-2 cursor-pointer rounded-md"
                   >
                     Edit Profile
-                  </button>
-                  <button
-                    onClick={logOutHandler}
-                    className="border-2 bg-gray-800 font-medium text-white px-5 py-2 cursor-pointer rounded-md"
-                  >
-                    LogOut
                   </button>
                 </>
               ) : (
@@ -239,17 +219,21 @@ const MyProfile = () => {
           </div>
         </div>
 
-        <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">
-          {user.userName}
-          's published blogs
-        </h4>
-        <div className="container mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-          {blogs.map((item) => (
-            <Link to={`/blog/${item._id}`} key={item._id}>
-              <BlogCard item={item} />
-            </Link>
-          ))}
-        </div>
+        {blogs.length !== 0 && (
+          <div>
+            <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">
+              {user.userName}
+              's published blogs
+            </h4>
+            <div className="container mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+              {blogs.map((item) => (
+                <Link to={`/blog/${item._id}`} key={item._id}>
+                  <BlogCard item={item} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

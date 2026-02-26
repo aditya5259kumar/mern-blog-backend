@@ -2,22 +2,32 @@ import React, { useState, useEffect } from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { HiOutlineMenuAlt4, HiOutlineX } from "react-icons/hi";
 import { NAVBMENU } from "../data/data";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { myProfile } from "../redux/slices/userSlice";
+import { logout } from "../redux/slices/authSlice";
 import defaultUser from "../assets/defaultUser.jpg";
+import { toast } from "react-toastify";
+import { TbLogout2 ,TbLogout } from "react-icons/tb";
+import { LuUser } from "react-icons/lu";
 
 const Navbar = () => {
   const [sideBar, setSideBar] = useState(false);
+  const [userSetting, setUserSetting] = useState(false);
 
   function handleSideBar() {
     setSideBar((prev) => !prev);
+  }
+
+  function handleUserSetting() {
+    setUserSetting((prev) => !prev);
   }
 
   const { token } = useSelector((state) => state.auth);
   const { user, loading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -32,6 +42,15 @@ const Navbar = () => {
   }
 
   if (!user) return null;
+
+  function logOutHandler() {
+    if (token) {
+      if (!confirm("Are you sure you want to logout?")) return;
+      dispatch(logout());
+      toast.success("LogOut successfully", { position: "top-center" });
+      navigate("/login");
+    }
+  }
 
   return (
     <>
@@ -62,27 +81,54 @@ const Navbar = () => {
               ))}
             </nav>
 
-            <div className="flex justify-center items-center gap-4 sm:gap-8">
+            <div className="flex justify-center items-center gap-6 sm:gap-10">
               {token && (
-                <Link
-                  to="profile"
-                  className="flex items-center gap-1 overflow-hidden"
-                >
-                  <img
-                    src={
-                      user.profilePhoto
-                        ? `http://localhost:3000${user.profilePhoto}`
-                        : defaultUser
-                    }
-                    alt=""
-                    className="w-10 h-10 object-cover rounded-full"
-                  />
-                  <span className="hidden md:block text-sm font-medium text-gray-800">
-                    @{user?.userName}
-                  </span>
-                </Link>
+                <div className="relative">
+                  <button
+                    onClick={handleUserSetting}
+                    className="flex items-center gap-1 overflow-hidden"
+                  >
+                    <img
+                      src={
+                        user.profilePhoto
+                          ? `http://localhost:3000${user.profilePhoto}`
+                          : defaultUser
+                      }
+                      alt=""
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                    <span className="hidden md:block font-semibold text-gray-800">
+                      @{user?.userName}
+                    </span>
+                  </button>
+
+                  {userSetting && (
+                    <div className="absolute -right-2 top-12 md:-right-6 w-36 bg-gray-50 rounded-lg  shadow-xl z-8">
+                      <Link
+                        to="profile"
+                        className=" cursor-pointer w-full px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all flex items-center justify-between gap-2"
+                      >
+                        Profile <LuUser className="text-lg" />
+                      </Link>
+                      <button
+                        onClick={logOutHandler}
+                        className="cursor-pointer w-full px-4 py-2.5 text-sm border-b font-medium border border-gray-200 text-red-700 transition-all flex items-center justify-between gap-2"
+                      >
+                        LogOut <TbLogout className="text-lg" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
 
+              {!token && (
+                <Link
+                  to="login"
+                  className="flex items-center gap-3 text-sm md:text-base border-2 font-medium border-gray-600 px-3 md:py-1.5 py-1.5 rounded-md"
+                >
+                  Login <TbLogout2 className="text-lg"/>
+                </Link>
+              )}
               <Link
                 to="contact"
                 className="hidden md:block cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
@@ -109,7 +155,7 @@ const Navbar = () => {
               />
             </span>
 
-            <nav className="flex flex-col font-semibold gap-8 items-center justify-center">
+            <nav className="flex flex-col font-semibold gap-7 items-center justify-center">
               {NAVBMENU.map((value, index) => (
                 <Link
                   key={index}
@@ -122,12 +168,32 @@ const Navbar = () => {
                 </Link>
               ))}
             </nav>
-            <Link
-              to="contact"
-              className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
-            >
-              Contact
-            </Link>
+
+            <div className="flex flex-col items-center gap-7">
+              {!token && (
+                <Link
+                  to="login"
+                  className="flex items-center gap-3 cursor-pointer border-2 border-gray-800 rounded-md px-3 py-1.5 text-gray-700 font-medium"
+                >
+                  Login <TbLogout2 className="text-lg"/>
+                </Link>
+              )}
+              <Link
+                to="contact"
+                className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
+              >
+                Contact
+              </Link>
+
+              {token && (
+                <button
+                  onClick={logOutHandler}
+                  className="flex items-center gap-3 cursor-pointer text-red-700 font-medium border border-red-700 px-4 py-1.5 rounded-md"
+                >
+                  LogOut <TbLogout  className="text-lg" />
+                </button>
+              )}
+            </div>
           </div>
         )}
       </header>

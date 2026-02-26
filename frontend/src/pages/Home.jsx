@@ -107,6 +107,29 @@ const Home = () => {
             </Link>
           ))}
         </div>
+
+        <div className=" bg-gray-100 lg:mx-40 lg:py-20 md:py-12 py-8 px-10 md:px-20  rounded-xl mt-14">
+          <h5 className="font-bold text-3xl mb-4 text-center text-gray-800">
+            Subscribe to our newsletters
+          </h5>
+          <div className="flex flex-col space-y-2 text-sm">
+            <p className="leading-7 mb-6 text-base md:text-lg text-gray-600 text-center">
+              Subscribe our blog with unlimited access to all the post we offer.
+            </p>
+            <form action="">
+              <div className="shadow-md bg-white flex justify-between items-center rounded-lg overflow-hidden">
+                <input
+                  type="text"
+                  placeholder="Email Address"
+                  className="focus:outline-none  px-3 md:p-4 w-full"
+                />
+                <button className="py-3 md:py-4.5 px-4 md:px-7 font-semibold bg-gray-800 text-white cursor-pointer">
+                  Subscribe
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

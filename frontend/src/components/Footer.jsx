@@ -80,27 +80,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="mb-8 ">
-            <h5 className="font-bold text-xl mb-6">Subscribe</h5>
-            <div className="flex flex-col space-y-2 text-sm">
-              <p className="leading-7 mb-4">
-                Subscribe our blog with unlimited access to all the post we
-                offer.
-              </p>
-              <form action="">
-                <div className="bg-gray-800 flex justify-between items-center rounded-lg overflow-hidden">
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    className="focus:outline-none p-3.5 w-fit md:w-50"
-                  />
-                  <button className="p-3.5 font-semibold bg-gray-700 cursor-pointer">
-                    Subscribe
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+         
         </div>
       </div>
 

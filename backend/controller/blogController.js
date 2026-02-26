@@ -25,7 +25,7 @@ const blog = {
 
       const blogDetail = await blogModel
         .findById(blogId)
-        .populate("author", "userName");
+        .populate("author", "userName profilePhoto");
 
       helper.success(res, "all blogs fetched successfully.", blogDetail);
     } catch (error) {
