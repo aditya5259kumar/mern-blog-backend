@@ -41,8 +41,6 @@ const Navbar = () => {
     return <p>loading...</p>;
   }
 
-  if (!user) return null;
-
   function logOutHandler() {
     if (token) {
       if (!confirm("Are you sure you want to logout?")) return;

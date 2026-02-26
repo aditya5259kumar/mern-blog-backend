@@ -16,4 +16,13 @@ router.put(
   userController.updateProfile,
 );
 
+// all authors
+router.get("/all-authors", userController.allAuthors);
+
+// authors detail
+router.get("/author/:id", userController.singleAuthorDetail);
+
+// search author
+router.get("/search-author", userController.searchAuthor);
+
 export default router;

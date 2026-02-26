@@ -13,7 +13,7 @@ const userController = {
       const user = await userModel.findById(userId).select("-password");
 
       if (!user) {
-        return helper.error(res, "User not found.");
+        return helper.error(res, "User not found.", 404);
       }
 
       const blogs = await blogModel
@@ -71,6 +71,69 @@ const userController = {
       return helper.success(res, "Profile updated successfully.", updatedUser);
     } catch (error) {
       return helper.error(res, "Something went wrong!", error.message);
+    }
+  },
+
+  // -------- all authors --------
+  allAuthors: async (req, res) => {
+    try {
+      const authorIds = await blogModel.distinct("author");
+
+      const authors = await userModel
+        .find({ _id: { $in: authorIds } })
+        .select("-password -email");
+
+      helper.success(res, "all authors fetched successfully!", authors);
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- author detail --------
+  singleAuthorDetail: async (req, res) => {
+    try {
+      const authorId = req.params.id;
+
+      const authorDetail = await userModel
+        .findOne({ _id: authorId })
+        .select("-password -email");
+
+      if (!authorDetail) {
+        helper.error(res, "author not found!", 404);
+      }
+
+      const blogs = await blogModel
+        .find({ author: authorId })
+        .populate("author", "userName");
+
+      helper.success(res, "author detail fetched successfully!", {
+        author: authorDetail,
+        blogs,
+        totalBlogs: blogs.length,
+      });
+    } catch (error) {
+      helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- search author --------
+  searchAuthor: async (req, res) => {
+    try {
+      const search = req.query.search || "";
+
+      const authors = await userModel
+        .find({
+          userName: { $regex: search, $options: "i" },
+        })
+        .select("-password -email");
+
+      helper.success(
+        res,
+        `author with "${search}" userName fetched successfully!`,
+        authors,
+      );
+    } catch (error) {
+      helper.error(res, "something went wrong!", error.message);
     }
   },
 };

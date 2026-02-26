@@ -219,6 +219,10 @@ const MyProfile = () => {
           </div>
         </div>
 
+{blogs.length === 0 && (<div>
+  <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">No Published blogs</p>
+</div>)
+}
         {blogs.length !== 0 && (
           <div>
             <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">

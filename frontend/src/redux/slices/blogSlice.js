@@ -143,6 +143,24 @@ export const updateBlog = createAsyncThunk(
   },
 );
 
+//search blog
+export const searchBlog = createAsyncThunk(
+  "searchBlog",
+  async (search, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/search-blog?search=${search}`,
+      );
+
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "failed to search blog",
+      );
+    }
+  },
+);
+
 const blogSlice = createSlice({
   name: "blog",
   initialState: {
@@ -246,6 +264,21 @@ const blogSlice = createSlice({
         state.currentBlog = updatedBlog;
       })
       .addCase(updateBlog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // search blogs-------------
+      .addCase(searchBlog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchBlog.fulfilled, (state, action) => {
+        state.blogs = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(searchBlog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

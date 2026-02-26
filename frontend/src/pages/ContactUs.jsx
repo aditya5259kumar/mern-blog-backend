@@ -33,6 +33,8 @@ const ContactUs = () => {
       newError.phone = "phone is required!";
     } else if (formData.phone.length != 10) {
       newError.phone = "10 digit phone!";
+    } else if (!/^\d*$/.test(formData.phone)) {
+      newError.phone = "numbers only";
     }
 
     if (!formData.message) {
@@ -45,6 +47,14 @@ const ContactUs = () => {
       setError(newError);
       return;
     }
+
+    alert("message sended.");
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
   }
 
   return (
@@ -95,7 +105,7 @@ const ContactUs = () => {
             </p>
           )}
           <input
-            type="number"
+            type="text"
             placeholder="Phone"
             value={formData.phone}
             name="phone"

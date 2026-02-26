@@ -45,13 +45,13 @@ const Home = () => {
           <div className="font-medium mb-20 flex space-x-4 items-center justify-center">
             <Link
               to="blog"
-              className="px-6 md:px-8  rounded-md py-2 md:py-3 text-white border-2 border-gray-800 bg-gray-800"
+              className="px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-white border-2 border-gray-800 bg-gray-800"
             >
               All Blogs
             </Link>
             <Link
               to="category"
-              className="font-medium px-6 md:px-8  rounded-md py-2 md:py-3 text-gray-800 border-2 border-gray-800 bg-transparent"
+              className="font-medium px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-gray-800 border-2 border-gray-800 bg-transparent"
             >
               Explore Categories
             </Link>
@@ -60,12 +60,15 @@ const Home = () => {
 
         <div className="mb-12 xl:w-4xl mx-auto group">
           <Link to={`/blog/${mainHeroBlog?._id}`}>
-            <div className="overflow-hidden rounded-md md:rounded-lg">
+            <div className="relative overflow-hidden rounded-md md:rounded-lg">
               <img
-                src={`http://localhost:3000${mainHeroBlog?.images[0]}`}
+                src={`http://localhost:3000${mainHeroBlog?.images?.[0]}`}
                 alt={mainHeroBlog?.title}
                 className="h-50 md:h-100 group-hover:scale-110 transition-all w-4xl object-cover"
               />
+              <span className="absolute top-2 shadow-lg left-2 px-3 py-1 text-sm md:text-base rounded-md bg-white text-gray-800">
+                New
+              </span>
             </div>
 
             <div className=" p-2 xl:w-4xl ">
@@ -101,7 +104,7 @@ const Home = () => {
           Latest Blogs
         </h5>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
-          {blogs.slice(blogs.length - 3, blogs.length - 1).map((item) => (
+          {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
             <Link to={`/blog/${item._id}`} key={item._id}>
               <BlogCard item={item} />
             </Link>

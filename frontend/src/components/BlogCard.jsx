@@ -25,7 +25,7 @@ const BlogCard = ({ item }) => {
     <div className="w-full rounded-2xl group ">
       <div className="overflow-hidden rounded-lg ">
         <img
-          src={`http://localhost:3000${item.images[0]}`}
+          src={`http://localhost:3000${item?.images[0]}`}
           alt={item.title}
           className=" h-50 md:h-60 w-full object-cover group-hover:scale-110 transition-all ease-in-out duration-300"
         />

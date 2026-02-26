@@ -25,6 +25,7 @@ const authValidator = {
         "password must contain a lowercase letter, uppercase letter, number, special character",
       ),
   ],
+
   loginValidator: [
     body("email")
       .notEmpty()

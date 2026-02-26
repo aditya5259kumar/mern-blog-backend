@@ -115,7 +115,7 @@ const CreateBlog = () => {
 
       if (!result.error) {
         toast.success("Blog created successfully");
-        navigate("/blog");
+        navigate("/");
       } else {
         toast.error("Creation failed");
       }

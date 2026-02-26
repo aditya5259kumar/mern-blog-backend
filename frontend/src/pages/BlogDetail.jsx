@@ -13,6 +13,17 @@ import {
 } from "react-icons/hi";
 import defaultUser from "../assets/defaultUser.jpg";
 
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// import required modules
+import { EffectFade, Navigation, Pagination } from "swiper/modules";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -51,7 +62,7 @@ const BlogDetail = () => {
     dispatch(blogDetail(id));
   }, [dispatch, id]);
 
-  // console.log("currentBlog=====", currentBlog);
+  console.log("currentBlog=====", currentBlog);
 
   if (!currentBlog) return <p>No blog found</p>;
 
@@ -97,9 +108,9 @@ const BlogDetail = () => {
   //   navigate(`author/${currentBlog.author?._id}`);
   // }
 
-//   function authorProfileHandler() {
-//   navigate(`/author/${currentBlog.author?._id}`);
-// }
+  //   function authorProfileHandler() {
+  //   navigate(`/author/${currentBlog.author?._id}`);
+  // }
 
   return (
     <div className=" my-15">
@@ -149,11 +160,15 @@ const BlogDetail = () => {
             to={`/author/${currentBlog.author?._id}`}
             className="py-2 px-4 rounded-2xl transition-all flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
           >
-            <img  src={
-                            currentBlog?.author?.profilePhoto
-                              ? `http://localhost:3000${currentBlog?.author?.profilePhoto}`
-                              : defaultUser
-                          } alt="" className="w-10 h-10 object-cover rounded-full" />
+            <img
+              src={
+                currentBlog?.author?.profilePhoto
+                  ? `http://localhost:3000${currentBlog?.author?.profilePhoto}`
+                  : defaultUser
+              }
+              alt=""
+              className="w-10 h-10 object-cover rounded-full"
+            />
             <h4 className=" text-center font-semibold text-lg">
               @{currentBlog.author.userName}
             </h4>
@@ -163,13 +178,38 @@ const BlogDetail = () => {
           </span>
         </div>
 
-        <div className="mb-4 overflow-hidden rounded-2xl shadow-xl">
+        {/* --------------------------------------- */}
+
+        <Swiper
+          spaceBetween={30}
+          effect={"fade"}
+          navigation={true}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[EffectFade, Navigation, Pagination]}
+          className="mySwiper mb-4 overflow-hidden rounded-2xl shadow-xl"
+        >
+          {currentBlog?.images.map((item) => (
+            <SwiperSlide key={item}>
+              <img
+                src={`http://localhost:3000${item}`}
+                className="w-full h-70 md:h-100 object-cover"
+                alt={currentBlog.title}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* --------------------------------------- */}
+
+        {/* <div className="mb-4 overflow-hidden rounded-2xl shadow-xl">
           <img
             src={`http://localhost:3000${currentBlog.images[0]}`}
             alt={currentBlog.title}
             className="w-full h-70 md:h-100 object-cover "
           />
-        </div>
+        </div> */}
 
         <div className="mt-6 mb-5 flex flex-wrap gap-x-4 gap-y-2">
           {currentBlog.category.map((val) => (
