@@ -9,6 +9,7 @@ const Category = () => {
   let defaultBlogCategory = "Technology";
   const [categoryName, setCategoryName] = useState(defaultBlogCategory);
 
+  const { token } = useSelector((state) => state.auth);
   const { blogsWithSameCategory, loading } = useSelector((state) => state.blog);
   const dispatch = useDispatch();
 
@@ -68,7 +69,10 @@ const Category = () => {
           ) : (
             <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-12 gap-y-16">
               {blogsWithSameCategory.map((item) => (
-                <Link to={`/blog/${item._id}`} key={item._id}>
+                <Link
+                  to={token ? `/blog/${item._id}` : "/login"}
+                  key={item._id}
+                >
                   <BlogCard item={item} />
                 </Link>
               ))}

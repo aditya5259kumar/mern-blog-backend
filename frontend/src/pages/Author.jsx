@@ -36,12 +36,6 @@ const Authors = () => {
             Meet our writers and discover their unique perspectives on the
             world.
           </p>
-          {/* <Link
-            to="/blog"
-            className="bg-gray-800 text-white px-6 py-3 rounded-md"
-          >
-            View All Blogs
-          </Link> */}
         </div>
 
         <form className="mb-20 md:mt-5 lg:mx-40  border border-gray-300 shadow-md bg-white flex justify-center items-center rounded-xl md:rounded-2xl overflow-hidden">
@@ -61,7 +55,7 @@ const Authors = () => {
 
         {authors.length === 0 && (
           <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
-            author with this username does not found!
+            Author with this username does not exist
           </p>
         )}
 

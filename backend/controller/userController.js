@@ -121,8 +121,11 @@ const userController = {
     try {
       const search = req.query.search || "";
 
+      const authorIds = await blogModel.distinct("author");
+
       const authors = await userModel
         .find({
+          _id: { $in: authorIds },
           userName: { $regex: search, $options: "i" },
         })
         .select("-password -email");

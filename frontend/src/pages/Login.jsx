@@ -50,7 +50,7 @@ const Login = () => {
     const result = await dispatch(loginUser(formData));
 
     if (result.meta.requestStatus === "fulfilled") {
-      navigate("/blog");
+      navigate("/");
     }
   }
 

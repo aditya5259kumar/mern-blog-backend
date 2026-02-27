@@ -48,7 +48,7 @@ const ContactUs = () => {
       return;
     }
 
-    alert("message sended.");
+    alert("Your message has been successfully sent.");
     setFormData({
       name: "",
       email: "",

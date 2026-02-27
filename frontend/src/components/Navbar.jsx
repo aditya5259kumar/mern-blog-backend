@@ -88,8 +88,8 @@ const Navbar = () => {
                   >
                     <img
                       src={
-                        user.profilePhoto
-                          ? `http://localhost:3000${user.profilePhoto}`
+                        user?.profilePhoto
+                          ? `http://localhost:3000${user?.profilePhoto}`
                           : defaultUser
                       }
                       alt=""
@@ -131,7 +131,7 @@ const Navbar = () => {
                 to="contact"
                 className="hidden md:block cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
               >
-                Contact
+                Contact Us
               </Link>
 
               <div
@@ -180,7 +180,7 @@ const Navbar = () => {
                 to="contact"
                 className="cursor-pointer hover:bg-gray-700 transition-all bg-gray-900 rounded-md px-6 py-2 text-white font-medium"
               >
-                Contact
+                Contact Us
               </Link>
 
               {token && (

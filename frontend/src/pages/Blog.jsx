@@ -8,6 +8,8 @@ import { searchBlog } from "../redux/slices/blogSlice";
 const Blog = () => {
   const [searchText, setSearchText] = useState("");
 
+  const { token } = useSelector((state) => state.auth);
+
   const {
     blogs,
     loading,
@@ -57,7 +59,7 @@ const Blog = () => {
 
         {blogs.length === 0 && (
           <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
-            Blog with this title does not found!
+            Blog with this title does not exist!
           </p>
         )}
 
@@ -66,7 +68,7 @@ const Blog = () => {
         ) : (
           <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-12 gap-y-16">
             {blogs.map((item) => (
-              <Link to={`/blog/${item._id}`} key={item._id}>
+              <Link to={token ? `/blog/${item._id}` : "/login"} key={item._id}>
                 <BlogCard item={item} />
               </Link>
             ))}

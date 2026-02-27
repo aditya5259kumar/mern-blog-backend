@@ -7,6 +7,7 @@ import { HiOutlineCalendar } from "react-icons/hi";
 
 const Home = () => {
   const { blogs } = useSelector((state) => state.blog);
+  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const Home = () => {
         </div>
 
         <div className="mb-12 xl:w-4xl mx-auto group">
-          <Link to={`/blog/${mainHeroBlog?._id}`}>
+          <Link to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}>
             <div className="relative overflow-hidden rounded-md md:rounded-lg">
               <img
                 src={`http://localhost:3000${mainHeroBlog?.images?.[0]}`}
@@ -94,7 +95,7 @@ const Home = () => {
         </h5>
         <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {blogs.slice(0, 3).map((item) => (
-            <Link to={`/blog/${item._id}`} key={item._id}>
+            <Link to={token ? `/blog/${item._id}` : "/login"} key={item._id}>
               <BlogCard item={item} />
             </Link>
           ))}
@@ -105,7 +106,10 @@ const Home = () => {
         </h5>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
-            <Link to={`/blog/${item._id}`} key={item._id}>
+            <Link
+              to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}
+              key={item._id}
+            >
               <BlogCard item={item} />
             </Link>
           ))}
