@@ -46,13 +46,13 @@ const Home = () => {
           <div className="font-medium mb-20 flex space-x-4 items-center justify-center">
             <Link
               to="blog"
-              className="px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-white border-2 border-gray-800 bg-gray-800"
+              className="text-center px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-white border-2 border-gray-800 bg-gray-800"
             >
               All Blogs
             </Link>
             <Link
               to="category"
-              className="font-medium px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-gray-800 border-2 border-gray-800 bg-transparent"
+              className="text-center font-medium px-6 md:px-8 text-sm md:text-base rounded-md py-2 md:py-3 text-gray-800 border-2 border-gray-800 bg-transparent"
             >
               Explore Categories
             </Link>
@@ -107,7 +107,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
             <Link
-              to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}
+              to={token ? `/blog/${item?._id}` : "/login"}
               key={item._id}
             >
               <BlogCard item={item} />
@@ -115,7 +115,7 @@ const Home = () => {
           ))}
         </div>
 
-        <div className=" bg-gray-100 lg:mx-40 lg:py-20 md:py-12 py-8 px-10 md:px-20  rounded-xl mt-14">
+        <div className=" bg-gray-100 lg:mx-40 lg:py-20 md:py-12 py-8 px-4 md:px-20  rounded-xl mt-14">
           <h5 className="font-bold text-3xl mb-4 text-center text-gray-800">
             Subscribe to our newsletters
           </h5>

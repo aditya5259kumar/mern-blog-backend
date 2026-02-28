@@ -20,8 +20,17 @@ export const authorDetail = createAsyncThunk(
   "authorDetail",
   async (id, thunkAPI) => {
     try {
+      const token = localStorage.getItem("token");
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
       const response = await axios.get(
         `http://localhost:3000/api/author/${id}`,
+        config,
       );
       // console.log("response.data---------->", response.data);
       return response.data.data;

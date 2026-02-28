@@ -25,7 +25,7 @@ const Category = () => {
   }
 
   return (
-    <div className="py-20">
+    <div className="py-15 md:py-20">
       <div className="container px-8 md:px-20 mx-auto">
         <h2 className="text-5xl md:text-6xl text-gray-800 font-bold text-center mb-8">
           Explore Topics
@@ -37,14 +37,14 @@ const Category = () => {
           totam pariatur ullam aspernatur! Error soluta magni esse ducimus.
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, ducimus!
         </p>
-        <div className="flex flex-wrap items-center justify-center space-x-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-center space-x-2 md:space-x-4 space-y-3">
           {AVAILABLE_CATEGORIES.map((item) => (
             <button
               onClick={() => {
                 handleCategory(item);
               }}
               key={item}
-              className={`text-base cursor-pointer md:px-5 md:py-2 px-4 py-1.5 rounded-lg transition-all duration-200 
+              className={`text-sm md:text-base cursor-pointer md:px-5 md:py-2 px-4 py-1.5 rounded-lg transition-all duration-200 
     ${
       item === categoryName
         ? "bg-gray-800 text-white border-gray-800"

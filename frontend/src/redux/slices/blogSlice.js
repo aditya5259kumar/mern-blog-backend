@@ -43,18 +43,30 @@ export const blogDetail = createAsyncThunk(
   "blog-detail",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/blog/${id}`);
+      const token = localStorage.getItem("token");
 
-      // console.log("response.data-------", response.data);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-      // console.log("response.data.data-------", response.data.data);
+      const response = await axios.get(
+        `http://localhost:3000/api/blog/${id}`,
+        config
+      );
+
       return response.data.data;
     } catch (error) {
+      if (error.response?.status === 401) {
+        return thunkAPI.rejectWithValue("UNAUTHORIZED");
+      }
+
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "something went Wrong",
+        error.response?.data?.message || "Something went wrong"
       );
     }
-  },
+  }
 );
 
 // createBlogs

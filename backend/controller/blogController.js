@@ -3,6 +3,7 @@ import path from "path";
 
 import userModel from "../model/users.js";
 import blogModel from "../model/blogs.js";
+import likeModel from "../model/likes.js";
 import helper from "../utils/helper.js";
 
 const blog = {
@@ -22,13 +23,28 @@ const blog = {
     try {
       const blogId = req.params.id;
 
+      const likeCount = await likeModel.countDocuments({ blog: blogId });
+
       const blogDetail = await blogModel
         .findById(blogId)
         .populate("author", "userName profilePhoto");
 
-      helper.success(res, "all blogs fetched successfully.", blogDetail);
+      if (!blogDetail) {
+        return helper.error(res, "Blog not found!");
+      }
+
+      const existingLike = await likeModel.findOne({
+        blog: blogId,
+        user: req.user.id,
+      });
+
+      helper.success(res, "Blog fetched successfully.", {
+        blog: blogDetail,
+        likeCount,
+        isLiked: !!existingLike,
+      });
     } catch (error) {
-      helper.error(res, "something went wrong!", error);
+      helper.error(res, "Something went wrong!", error);
     }
   },
 
@@ -236,9 +252,61 @@ const blog = {
         .find({ title: { $regex: search, $options: "i" } })
         .populate("author", "userName");
 
-      helper.success(res, `blogs with "${search}" title fetched successfully!`, blogs);
+      helper.success(
+        res,
+        `blogs with "${search}" title fetched successfully`,
+        blogs,
+      );
     } catch (error) {
       helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- like Blog --------
+  likeBlog: async (req, res) => {
+    try {
+      const id = req.user.id;
+      const blogId = req.params.blogId;
+
+      const blog = await blogModel.findById(blogId);
+
+      if (!blog) {
+        return helper.error(res, "blog not found!", 404);
+      }
+
+      const like = await likeModel.create({ user: id, blog: blogId });
+
+      helper.success(res, "blog has been liked.", like);
+    } catch (error) {
+      if (error.code === 11000) {
+        return helper.error(res, "Blog already liked", 400);
+      }
+
+      helper.error(res, "something went wrong!", error.message);
+    }
+  },
+
+  // -------- unlike Blog --------
+  unLikeBlog: async (req, res) => {
+    try {
+      const id = req.user.id;
+      const blogId = req.params.blogId;
+
+      const blog = await blogModel.findById(blogId);
+
+      if (!blog) {
+        return helper.error(res, "blog not found!", 404);
+      }
+
+      const like = await likeModel.deleteOne({ user: id, blog: blogId });
+
+      if (like.deletedCount === 0) {
+        return helper.error(res, "You have not liked this blog", 400);
+      }
+
+      helper.success(res, "blog has been unliked.", like);
+    } catch (error) {
+      helper.error(res, "something went wrong!", error.message);
     }
   },
 };

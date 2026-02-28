@@ -11,7 +11,9 @@ import {
   HiOutlineTrash,
   HiDotsVertical,
 } from "react-icons/hi";
+import { BiCommentDetail } from "react-icons/bi";
 import defaultUser from "../assets/defaultUser.jpg";
+import { IoSendSharp } from "react-icons/io5";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -37,6 +39,8 @@ const BlogDetail = () => {
 
   const [likeIcon, setLikeIcon] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [CommentCount, setCommentCount] = useState(1);
+  const [commentText, setCommentText] = useState("");
 
   function likeHandler() {
     if (likeIcon) {
@@ -46,6 +50,13 @@ const BlogDetail = () => {
       setLikeIcon(true);
       setLikeCount(likeCount + 1);
     }
+  }
+
+  function commenthandler(e) {
+    e.preventDefault();
+    console.log("comment text--------", commentText);
+    setCommentCount(CommentCount + 1);
+    setCommentText("");
   }
 
   const {
@@ -62,7 +73,13 @@ const BlogDetail = () => {
     dispatch(blogDetail(id));
   }, [dispatch, id]);
 
-  console.log("currentBlog=====", currentBlog);
+  useEffect(() => {
+    if (authError === "UNAUTHORIZED") {
+      navigate("/login", { state: { from: `/blog/${id}` } });
+    }
+  }, [authError, navigate, id]);
+
+  // console.log("currentBlog=====", currentBlog);
 
   if (!currentBlog) return <p>No blog found</p>;
 
@@ -151,7 +168,7 @@ const BlogDetail = () => {
           )}
         </div>
 
-        <h1 className="text-4xl text-gray-800 md:text-5xl font-bold leading-snug">
+        <h1 className="text-3xl text-gray-800 md:text-5xl font-bold leading-snug">
           {currentBlog.title}
         </h1>
 
@@ -170,15 +187,13 @@ const BlogDetail = () => {
               className="w-10 h-10 object-cover rounded-full"
             />
             <h4 className=" text-center font-semibold text-lg">
-              @{currentBlog.author.userName}
+              @{currentBlog?.author?.userName}
             </h4>
           </Link>
           <span className="block text-gray-500 lg:text-lg font-medium">
             ( Updated On: {formattedUpdatedDate} )
           </span>
         </div>
-
-        {/* --------------------------------------- */}
 
         <Swiper
           spaceBetween={30}
@@ -190,7 +205,7 @@ const BlogDetail = () => {
           modules={[EffectFade, Navigation, Pagination]}
           className="mySwiper mb-4 overflow-hidden rounded-2xl shadow-xl"
         >
-          {currentBlog?.images.map((item) => (
+          {currentBlog?.images?.map((item) => (
             <SwiperSlide key={item}>
               <img
                 src={`http://localhost:3000${item}`}
@@ -201,18 +216,8 @@ const BlogDetail = () => {
           ))}
         </Swiper>
 
-        {/* --------------------------------------- */}
-
-        {/* <div className="mb-4 overflow-hidden rounded-2xl shadow-xl">
-          <img
-            src={`http://localhost:3000${currentBlog.images[0]}`}
-            alt={currentBlog.title}
-            className="w-full h-70 md:h-100 object-cover "
-          />
-        </div> */}
-
         <div className="mt-6 mb-5 flex flex-wrap gap-x-4 gap-y-2">
-          {currentBlog.category.map((val) => (
+          {currentBlog?.category?.map((val) => (
             <button
               key={val}
               className="px-4 py-2 bg-gray-600 rounded-md text-white text-sm"
@@ -227,38 +232,88 @@ const BlogDetail = () => {
           dangerouslySetInnerHTML={{ __html: currentBlog.content }}
         />
 
-        <div className="flex justify-between items-center border-t pt-6 border-gray-300">
-          <div
-            onClick={likeHandler}
-            className="flex items-center gap-2 cursor-pointer group"
-          >
-            <span className="text-2xl">
-              {likeIcon ? (
-                <GoHeartFill className="text-red-700 group-hover:scale-110 transition-all" />
-              ) : (
-                <GoHeart className="group-hover:scale-110 transition-all" />
-              )}
+        <div className="flex justify-end mb-5 items-center gap-1 sm:gap-4 font-bold">
+          <span className="text-lg font-bold"> Share blog:</span>
+          <div className="flex space-x-2 items-center text-lg">
+            <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
+              <FaFacebookF />
             </span>
-            <p className="font-semibold">{likeCount}</p>
+            <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
+              <FaInstagram />
+            </span>
+            <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
+              <FaXTwitter />
+            </span>
+
+            <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
+              <FaLinkedinIn />
+            </span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-1 sm:gap-4 font-bold">
-            <span className="text-lg font-bold"> Share blog:</span>
-            <div className="flex space-x-2 items-center text-lg">
-              <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
-                <FaFacebookF />
-              </span>
-              <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
-                <FaInstagram />
-              </span>
-              <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
-                <FaXTwitter />
-              </span>
+        <div className="flex border-t pt-4 border-gray-300">
+          <div className="flex items-center gap-4">
+            <span
+              onClick={likeHandler}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              {likeIcon ? (
+                <GoHeartFill className="text-2xl text-red-700 group-hover:scale-110 transition-all" />
+              ) : (
+                <GoHeart className="text-gray-500 text-2xl group-hover:scale-110 transition-all" />
+              )}
+              <p className="font-semibold">{likeCount}</p>
+            </span>
 
-              <span className="p-1 text-xl text-gray-900 rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
-                <FaLinkedinIn />
-              </span>
+            <span className="flex items-center gap-2 cursor-pointer group">
+              <BiCommentDetail className="text-gray-500 text-2xl group-hover:scale-110 transition-all" />
+              <p className="font-semibold">{CommentCount}</p>
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <form
+            onSubmit={commenthandler}
+            className="flex items-center my-5 gap-2 w-full overflow-hidden "
+          >
+            {/* <img
+                src=""
+                alt=""
+                className="h-10 w-10 mb-1 object-cover overflow-hidden bg-black rounded-full"
+              /> */}
+            <input
+              type="text"
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="write comment..."
+              className="text-sm  md:text-base  font-normal border-gray-300  border-b px-3 py-1.5 md:px-5 md:py-2 w-full text-gray-500 focus:outline-none"
+            />
+            <button
+              className="text-white text-base sm:text-base px-3 py-1.5 md:px-5 md:py-2 rounded-md bg-gray-800
+              "
+            >
+              Send
+            </button>
+          </form>
+
+          <div className="flex gap-4 flex-col">
+            {/* --------------------- */}
+
+            <div className="">
+              <div className="flex items-center gap-2 text-gray-700">
+                <img
+                  src=""
+                  alt=""
+                  className="h-10 w-10 mb-1 object-cover overflow-hidden bg-black rounded-full"
+                />
+                <span className="underline font-medium">@username</span>
+              </div>
+              <p className="text-sm text-gray-500">
+                Lorem ipsum dolor sit amet
+              </p>
             </div>
+
+            {/* --------------------- */}
           </div>
         </div>
 

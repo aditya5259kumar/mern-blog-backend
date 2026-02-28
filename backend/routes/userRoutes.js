@@ -20,7 +20,7 @@ router.put(
 router.get("/all-authors", userController.allAuthors);
 
 // authors detail
-router.get("/author/:id", userController.singleAuthorDetail);
+router.get("/author/:id",authenticateUser, userController.singleAuthorDetail);
 
 // search author
 router.get("/search-author", userController.searchAuthor);

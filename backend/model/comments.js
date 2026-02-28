@@ -5,11 +5,13 @@ const commentSchema = new mongoose.Schema(
     text: {
       type: String,
     },
-    blog: {
-      type: String,
-    },
     author: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    blog: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
     },
   },
   {
