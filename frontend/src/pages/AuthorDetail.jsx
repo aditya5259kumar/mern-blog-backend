@@ -85,10 +85,10 @@ const AuthorDetail = () => {
                 Published Blogs :{" "}
                 <span className="font-bold">{singleAuthor.totalBlogs}</span>
               </p>
-              <p className="text-sm mt-1 mb-6 text-gray-500">
+              {/* <p className="text-sm mt-1 mb-6 text-gray-500">
                 Total <span className="mx-1 font-medium">2343</span> likes
                 <GoHeartFill className="inline mb-0.5 ml-1 text-red-600" />
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

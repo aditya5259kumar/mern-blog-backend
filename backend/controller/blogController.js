@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import sanitizeHtml from "sanitize-html";
 
 import userModel from "../model/users.js";
 import blogModel from "../model/blogs.js";
@@ -70,9 +71,39 @@ const blog = {
 
       const images = req.files.map((file) => `/uploads/${file.filename}`);
 
+      const cleanContent = sanitizeHtml(content, {
+        allowedTags: [
+          "p",
+          "b",
+          "i",
+          "em",
+          "strong",
+          "h1",
+          "h2",
+          "h3",
+          "ul",
+          "ol",
+          "li",
+          "blockquote",
+          "code",
+          "a",
+          "br",
+          // "span",
+        ],
+        allowedAttributes: {
+          a: ["href", "target"],
+        },
+        allowedSchemes: ["http", "https", "mailto"],
+      });
+
+      const cleanTitle = sanitizeHtml(title, {
+        allowedTags: [],
+        allowedAttributes: {},
+      });
+
       const blogPost = await blogModel.create({
-        title,
-        content,
+        title: cleanTitle,
+        content: cleanContent,
         category,
         images,
         author: user._id,
@@ -169,10 +200,47 @@ const blog = {
         return helper.error(res, "Maximum 3 categories allowed");
       }
 
+      let cleanContent = blog.content;
+      let cleanTitle = blog.title;
+
+      if (content !== undefined) {
+        cleanContent = sanitizeHtml(content, {
+          allowedTags: [
+            "p",
+            "b",
+            "i",
+            "em",
+            "strong",
+            "h1",
+            "h2",
+            "h3",
+            "ul",
+            "ol",
+            "li",
+            "blockquote",
+            "code",
+            "a",
+            "br",
+            // "span",
+          ],
+          allowedAttributes: {
+            a: ["href", "target"],
+          },
+          allowedSchemes: ["http", "https", "mailto"],
+        });
+      }
+
+      if (title !== undefined) {
+        cleanTitle = sanitizeHtml(title, {
+          allowedTags: [],
+          allowedAttributes: {},
+        });
+      }
+
       const updateData = {
-        title: title !== undefined ? title : blog.title,
+        title: cleanTitle,
         category: category !== undefined ? category : blog.category,
-        content: content !== undefined ? content : blog.content,
+        content: cleanContent,
         images: blog.images,
       };
 
@@ -236,7 +304,11 @@ const blog = {
         .find({ title: { $regex: search, $options: "i" } })
         .populate("author", "userName");
 
-      helper.success(res, `blogs with "${search}" title fetched successfully!`, blogs);
+      helper.success(
+        res,
+        `blogs with "${search}" title fetched successfully!`,
+        blogs,
+      );
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }

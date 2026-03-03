@@ -12,6 +12,7 @@ import {
   HiDotsVertical,
 } from "react-icons/hi";
 import defaultUser from "../assets/defaultUser.jpg";
+import DOMPurify from "dompurify";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -35,18 +36,18 @@ const BlogDetail = () => {
     setBlogSetting((prev) => !prev);
   }
 
-  const [likeIcon, setLikeIcon] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  // const [likeIcon, setLikeIcon] = useState(false);
+  // const [likeCount, setLikeCount] = useState(0);
 
-  function likeHandler() {
-    if (likeIcon) {
-      setLikeIcon(false);
-      setLikeCount(likeCount - 1);
-    } else if (!likeIcon) {
-      setLikeIcon(true);
-      setLikeCount(likeCount + 1);
-    }
-  }
+  // function likeHandler() {
+  //   if (likeIcon) {
+  //     setLikeIcon(false);
+  //     setLikeCount(likeCount - 1);
+  //   } else if (!likeIcon) {
+  //     setLikeIcon(true);
+  //     setLikeCount(likeCount + 1);
+  //   }
+  // }
 
   const {
     currentBlog,
@@ -62,7 +63,7 @@ const BlogDetail = () => {
     dispatch(blogDetail(id));
   }, [dispatch, id]);
 
-  console.log("currentBlog=====", currentBlog);
+  // console.log("currentBlog=====", currentBlog);
 
   if (!currentBlog) return <p>No blog found</p>;
 
@@ -224,11 +225,33 @@ const BlogDetail = () => {
 
         <div
           className="blog-content mb-6"
-          dangerouslySetInnerHTML={{ __html: currentBlog.content }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(currentBlog.content, {
+              ALLOWED_TAGS: [
+                "p",
+                "b",
+                "i",
+                "em",
+                "strong",
+                "h1",
+                "h2",
+                "h3",
+                "ul",
+                "ol",
+                "li",
+                "blockquote",
+                "code",
+                "a",
+                "br",
+                // "span",
+              ],
+              ALLOWED_ATTR: ["href", "target", "rel"],
+            }),
+          }}
         />
 
         <div className="flex justify-between items-center border-t pt-6 border-gray-300">
-          <div
+          {/* <div
             onClick={likeHandler}
             className="flex items-center gap-2 cursor-pointer group"
           >
@@ -240,7 +263,7 @@ const BlogDetail = () => {
               )}
             </span>
             <p className="font-semibold">{likeCount}</p>
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-1 sm:gap-4 font-bold">
             <span className="text-lg font-bold"> Share blog:</span>

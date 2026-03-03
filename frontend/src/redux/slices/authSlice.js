@@ -43,11 +43,11 @@ export const signupUser = createAsyncThunk(
 
       toast.success("signeUp successfully", { position: "top-center" });
 
-      console.log("response.data---------", response.data);
+      // console.log("response.data---------", response.data);
 
       const token = response.data.data;
 
-      console.log("token---------", token);
+      // console.log("token---------", token);
 
       localStorage.setItem("token", token);
 

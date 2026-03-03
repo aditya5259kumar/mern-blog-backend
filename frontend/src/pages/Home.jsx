@@ -107,7 +107,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
             <Link
-              to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}
+              to={token ? `/blog/${item?._id}` : "/login"}
               key={item._id}
             >
               <BlogCard item={item} />

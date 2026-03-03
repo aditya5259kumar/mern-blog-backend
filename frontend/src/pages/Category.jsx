@@ -18,7 +18,7 @@ const Category = () => {
   }, [dispatch]);
 
   function handleCategory(category) {
-    console.log(category);
+    // console.log(category);
     dispatch(blogCategory(category));
     setCategoryName(category);
     // console.log("blogsWithSameCategory---------", blogsWithSameCategory);

@@ -13,7 +13,7 @@ const MyProfile = () => {
     (state) => state.user,
   );
 
-  console.log("user----------------", user);
+  // console.log("user----------------", user);
   // console.log("blogs----------------", blogs);
   // console.log("totalBlogs----------------", totalBlogs);
 
@@ -86,7 +86,7 @@ const MyProfile = () => {
 
   if (error) {
     return (
-      <p className="text-center mt-20 text-red-500 font-semibold">{error}</p>
+      <p className="text-center mt-20 text-red-700 font-semibold">{error}</p>
     );
   }
 
@@ -184,10 +184,10 @@ const MyProfile = () => {
               <span className="font-bold">{totalBlogs}</span>
             </p>
 
-            <p className="text-sm mt-1 text-gray-500">
+            {/* <p className="text-sm mt-1 text-gray-500">
               Total <span className="mx-1 font-medium">2344</span> likes
               <GoHeartFill className="inline ml-1 text-red-600" />
-            </p>
+            </p> */}
 
             <div className="mt-10 flex gap-6 items-center md:justify-start justify-center">
               {!isEditing ? (
@@ -219,10 +219,13 @@ const MyProfile = () => {
           </div>
         </div>
 
-{blogs.length === 0 && (<div>
-  <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">No Published blogs</p>
-</div>)
-}
+        {blogs.length === 0 && (
+          <div>
+            <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
+              No Published blogs
+            </p>
+          </div>
+        )}
         {blogs.length !== 0 && (
           <div>
             <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">

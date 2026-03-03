@@ -387,7 +387,7 @@ const CreateBlog = () => {
                     </select>
                   </span>
 
-                  <button className="ql-link" />
+                  {/* <button className="ql-link" /> */}
                   <button className="ql-blockquote" />
                   <button className="ql-code-block" />
                   <button className="ql-clean" />
