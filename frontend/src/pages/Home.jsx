@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { readBlogs } from "../redux/slices/blogSlice";
 import BlogCard from "../components/BlogCard";
@@ -6,6 +6,8 @@ import { Link } from "react-router";
 import { HiOutlineCalendar } from "react-icons/hi";
 
 const Home = () => {
+  const [newsLetterText, setNewsLetterText] = useState("");
+
   const { blogs } = useSelector((state) => state.blog);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -40,8 +42,7 @@ const Home = () => {
           <p className="text-gray-500 text-center px-4 md:px-6 lg:px-30 xl:px-70 mb-10">
             Dive into powerful insights across technology, business, science,
             lifestyle, culture, and beyond. We bring together ideas, trends, and
-            perspectives that inform, inspire, and challenge the way you
-            think.{" "}
+            perspectives that inform, inspire, and challenge the way you think.
           </p>
           <div className="font-medium mb-20 flex space-x-4 items-center justify-center">
             <Link
@@ -106,10 +107,7 @@ const Home = () => {
         </h5>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
           {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
-            <Link
-              to={token ? `/blog/${item?._id}` : "/login"}
-              key={item._id}
-            >
+            <Link to={token ? `/blog/${item?._id}` : "/login"} key={item._id}>
               <BlogCard item={item} />
             </Link>
           ))}
@@ -128,9 +126,17 @@ const Home = () => {
                 <input
                   type="text"
                   placeholder="Email Address"
+                  value={newsLetterText}
+                  onChange={(e) => setNewsLetterText(e.target.value)}
                   className="focus:outline-none  px-3 md:p-4 w-full"
                 />
-                <button className="py-3 md:py-4.5 px-4 md:px-7 font-semibold bg-gray-800 text-white cursor-pointer">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setNewsLetterText("");
+                  }}
+                  className="py-3 md:py-4.5 px-4 md:px-7 font-semibold bg-gray-800 text-white cursor-pointer"
+                >
                   Subscribe
                 </button>
               </div>

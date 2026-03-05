@@ -4,6 +4,8 @@ import sanitizeHtml from "sanitize-html";
 
 import userModel from "../model/users.js";
 import blogModel from "../model/blogs.js";
+import likesModel from "../model/likes.js";
+import viewModel from "../model/views.js";
 import helper from "../utils/helper.js";
 
 const blog = {
@@ -22,12 +24,23 @@ const blog = {
   singleBlogDetail: async (req, res) => {
     try {
       const blogId = req.params.id;
+      const userId = req.user.id;
 
       const blogDetail = await blogModel
         .findById(blogId)
         .populate("author", "userName profilePhoto");
 
-      helper.success(res, "all blogs fetched successfully.", blogDetail);
+      const likeExist = await likesModel.findOne({
+        user: userId,
+        blog: blogId,
+      });
+
+      const isLiked = !!likeExist;
+
+      helper.success(res, "blog fetched successfully.", {
+        ...blogDetail.toObject(),
+        isLiked,
+      });
     } catch (error) {
       helper.error(res, "something went wrong!", error);
     }
@@ -281,8 +294,8 @@ const blog = {
         .find({ category: category })
         .populate("author", "userName");
 
-      if (!blogs) {
-        helper.error(res, "no blog with this category!", error);
+      if (blogs.length === 0) {
+        return helper.error(res, "no blogs with this category!");
       }
 
       helper.success(
@@ -306,11 +319,95 @@ const blog = {
 
       helper.success(
         res,
-        `blogs with "${search}" title fetched successfully!`,
+        `blogs with "${search}" title fetched successfully.`,
         blogs,
       );
     } catch (error) {
       helper.error(res, "something went wrong!", error);
+    }
+  },
+
+  // -------- toggle like blog --------
+  toggleLikeBlog: async (req, res) => {
+    try {
+      const blogId = req.params.blogId;
+      const userId = req.user.id;
+
+      const likeExist = await likesModel.findOne({
+        user: userId,
+        blog: blogId,
+      });
+
+      // dislike
+      if (likeExist) {
+        await likesModel.deleteOne({
+          user: userId,
+          blog: blogId,
+        });
+
+        await blogModel.findByIdAndUpdate(blogId, {
+          $inc: { likesCount: -1 },
+        });
+
+        const updatedBlog = await blogModel.findById(blogId);
+
+        return helper.success(res, "blog unliked successfully.", {
+          blog: updatedBlog,
+          isLiked: false,
+        });
+      }
+
+      // like
+      await likesModel.create({
+        user: userId,
+        blog: blogId,
+      });
+
+      await blogModel.findByIdAndUpdate(blogId, {
+        $inc: { likesCount: 1 },
+      });
+
+      const updatedBlog = await blogModel.findById(blogId);
+
+      return helper.success(res, "blog liked successfully.", {
+        blog: updatedBlog,
+        isLiked: true,
+      });
+    } catch (error) {
+      return helper.error(res, "something went wrong!", error.message);
+    }
+  },
+
+  // -------- blog views --------
+  viewBlog: async (req, res) => {
+    try {
+      const blogId = req.params.blogId;
+      const userId = req.user.id;
+
+      const viewExist = await viewModel.findOne({
+        user: userId,
+        blog: blogId,
+      });
+
+      if (viewExist) {
+        const blog = await blogModel.findById(blogId);
+        return helper.success(res, "view already counted", blog);
+      }
+
+      await viewModel.create({
+        user: userId,
+        blog: blogId,
+      });
+
+      const updatedBlog = await blogModel.findByIdAndUpdate(
+        blogId,
+        { $inc: { views: 1 } },
+        { new: true },
+      );
+
+      return helper.success(res, "view counted", updatedBlog);
+    } catch (error) {
+      return helper.error(res, "something went wrong", error.message);
     }
   },
 };

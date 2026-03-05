@@ -43,7 +43,16 @@ export const blogDetail = createAsyncThunk(
   "blog-detail",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/blog/${id}`);
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `http://localhost:3000/api/blog/${id}`,
+        config,
+      );
 
       // console.log("response.data-------", response.data);
 
@@ -160,6 +169,62 @@ export const searchBlog = createAsyncThunk(
     }
   },
 );
+
+// toggle like blog
+export const toggleLikeBlog = createAsyncThunk(
+  "toggleLikeBlog",
+  async (id, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.post(
+        `http://localhost:3000/api/blog/${id}/like`,
+        {},
+        config,
+      );
+
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "failed to toggle like",
+      );
+    }
+  },
+);
+
+// blog views
+export const viewBlog = createAsyncThunk("viewBlog", async (id, thunkAPI) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.post(
+      `http://localhost:3000/api/blog/${id}/view`,
+      {},
+      config,
+    );
+
+    // console.log("response.data-------", response.data);
+    // console.log("response.data.data-------", response.data.data);
+
+    return response.data.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || "failed to toggle like",
+    );
+  }
+});
 
 const blogSlice = createSlice({
   name: "blog",
@@ -279,6 +344,40 @@ const blogSlice = createSlice({
         state.error = null;
       })
       .addCase(searchBlog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // toggle like-------------
+      .addCase(toggleLikeBlog.fulfilled, (state, action) => {
+        const { blog, isLiked } = action.payload;
+
+        const existingBlog = state.blogs.find((b) => b._id === blog._id);
+        if (existingBlog) {
+          existingBlog.likesCount = blog.likesCount;
+          existingBlog.isLiked = isLiked;
+        }
+
+        if (state.currentBlog && state.currentBlog._id === blog._id) {
+          state.currentBlog.likesCount = blog.likesCount;
+          state.currentBlog.isLiked = isLiked;
+        }
+      })
+
+      // view blog-------------
+      .addCase(viewBlog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(viewBlog.fulfilled, (state, action) => {
+        if (state.currentBlog) {
+          state.currentBlog.views = action.payload.views;
+        }
+
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(viewBlog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

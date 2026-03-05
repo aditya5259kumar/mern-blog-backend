@@ -30,12 +30,12 @@ const Category = () => {
         <h2 className="text-5xl md:text-6xl text-gray-800 font-bold text-center mb-8">
           Explore Topics
         </h2>
-        <p className="text-gray-700 text-center px-4 md:px-6 lg:px-20 mb-8">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
-          exercitationem porro? Ipsam debitis laboriosam quas, sint eveniet
-          dignissimos alias at perferendis facere placeat quisquam unde fugiat
-          totam pariatur ullam aspernatur! Error soluta magni esse ducimus.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, ducimus!
+        <p className="text-gray-600 text-center px-4 md:px-6 lg:px-20 mb-8">
+          Browse through a wide range of categories designed to help you find
+          content that matches your interests. Each topic groups related blogs
+          together, making it easy to explore specific subjects. Click on any
+          category below to discover articles and dive deeper into the topics
+          you care about.
         </p>
         <div className="flex flex-wrap items-center justify-center space-x-4 space-y-3">
           {AVAILABLE_CATEGORIES.map((item) => (

@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { blogDetail, deleteBlog } from "../redux/slices/blogSlice";
+import {
+  blogDetail,
+  deleteBlog,
+  toggleLikeBlog,
+  viewBlog,
+} from "../redux/slices/blogSlice";
 import { toast } from "react-toastify";
-import { GoHeart, GoHeartFill } from "react-icons/go";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import {
@@ -12,6 +16,10 @@ import {
   HiDotsVertical,
 } from "react-icons/hi";
 import defaultUser from "../assets/defaultUser.jpg";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+
+import { FaRegEye } from "react-icons/fa6";
+
 import DOMPurify from "dompurify";
 
 // Import Swiper React components
@@ -36,19 +44,6 @@ const BlogDetail = () => {
     setBlogSetting((prev) => !prev);
   }
 
-  // const [likeIcon, setLikeIcon] = useState(false);
-  // const [likeCount, setLikeCount] = useState(0);
-
-  // function likeHandler() {
-  //   if (likeIcon) {
-  //     setLikeIcon(false);
-  //     setLikeCount(likeCount - 1);
-  //   } else if (!likeIcon) {
-  //     setLikeIcon(true);
-  //     setLikeCount(likeCount + 1);
-  //   }
-  // }
-
   const {
     currentBlog,
     loading,
@@ -61,17 +56,17 @@ const BlogDetail = () => {
 
   useEffect(() => {
     dispatch(blogDetail(id));
+    dispatch(viewBlog(id));
   }, [dispatch, id]);
 
   // console.log("currentBlog=====", currentBlog);
 
-  if (!currentBlog) return <p>No blog found</p>;
-
-  if (isLoading) {
+  if (loading || isLoading) {
     return <p>loading...</p>;
   }
-  if (loading) {
-    return <p>loading...</p>;
+
+  if (!currentBlog) {
+    return <p>No blog found</p>;
   }
 
   const formatDate = (dateString) => {
@@ -93,6 +88,11 @@ const BlogDetail = () => {
     currentBlog.author &&
     currentBlog.author._id === user._id;
 
+  function likeHandler() {
+    if (loading) return;
+    dispatch(toggleLikeBlog(id));
+  }
+
   function blogDeleteHandler() {
     if (!confirm("Are you sure you want to delete this blog??")) return;
     dispatch(deleteBlog(id));
@@ -104,14 +104,6 @@ const BlogDetail = () => {
     if (!confirm("Are you sure you want to edit this blog?")) return;
     navigate(`/edit-blog/${currentBlog._id}`);
   }
-
-  // function authorProfileHandler() {
-  //   navigate(`author/${currentBlog.author?._id}`);
-  // }
-
-  //   function authorProfileHandler() {
-  //   navigate(`/author/${currentBlog.author?._id}`);
-  // }
 
   return (
     <div className=" my-15">
@@ -250,20 +242,30 @@ const BlogDetail = () => {
           }}
         />
 
-        <div className="flex justify-between items-center border-t pt-6 border-gray-300">
-          {/* <div
-            onClick={likeHandler}
-            className="flex items-center gap-2 cursor-pointer group"
-          >
-            <span className="text-2xl">
-              {likeIcon ? (
-                <GoHeartFill className="text-red-700 group-hover:scale-110 transition-all" />
-              ) : (
-                <GoHeart className="group-hover:scale-110 transition-all" />
-              )}
-            </span>
-            <p className="font-semibold">{likeCount}</p>
-          </div> */}
+        <div className="block md:flex justify-between items-center border-t pt-6 border-gray-300">
+
+          <div className="flex items-center border-none md:border-b border-gray-300 pb-6 mb-4 gap-6">
+            <div
+              onClick={likeHandler}
+              className="flex items-center gap-1 cursor-pointer"
+            >
+              <span className="text-2xl">
+                {currentBlog.isLiked ? (
+                  <IoHeartSharp className="text-red-700" />
+                ) : (
+                  <IoHeartOutline className="text-gray-800" />
+                )}
+              </span>
+              <p className="font-semibold">{currentBlog.likesCount}</p>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <span className="text-xl">
+                <FaRegEye className="text-gray-800 transition-all" />
+              </span>
+              <p className="font-semibold">{currentBlog.views}</p>
+            </div>
+          </div>
 
           <div className="flex items-center gap-1 sm:gap-4 font-bold">
             <span className="text-lg font-bold"> Share blog:</span>
@@ -283,6 +285,7 @@ const BlogDetail = () => {
               </span>
             </div>
           </div>
+
         </div>
 
         {authError && (

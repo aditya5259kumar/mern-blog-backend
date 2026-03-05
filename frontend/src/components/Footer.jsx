@@ -2,19 +2,20 @@ import React from "react";
 import black_beog_logo from "../assets/63e6fae264e26f6039829955_beog.svg";
 import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { Link } from "react-router";
 
 const Footer = () => {
   return (
     <footer className="bg-gray-900">
       <div className="container px-8 md:px-20">
-        <div className="grid grid-rows-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:pb-4 pt-8 text-white">
+        <div className="grid grid-rows-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:pb-4 pt-8 text-white">
           <div className="">
             <div className="overflow-hidden cursor-pointer invert">
               <img src={black_beog_logo} alt="beog-logo" className="h-10" />
             </div>
             <p className="text-sm lg:pr-15 md:pr-0 my-6 leading-7">
-              Lorem Ipsum is simply dummy text the printing and typesetting
-              industry has been the industry's standard text ever since.
+              We bring together ideas, trends, and perspectives that inform,
+              inspire, and challenge the way you think.
             </p>
             <div className="flex space-x-4 items-center text-lg mb-8">
               <span className="p-1 text-xl text-white rounded-md hover:-translate-y-1 transition-all ease-in-out duration-200">
@@ -35,52 +36,50 @@ const Footer = () => {
           <div className=" mb-8 ">
             <h5 className="font-bold text-xl mb-6">Explore</h5>
             <div className="flex flex-col space-y-2 text-sm">
-              <a
-                href=""
+              <Link
+                to="/blog"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                About Us
-              </a>
-              <a
-                href=""
+                All Blogs
+              </Link>
+              <Link
+                to="/category"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                Contact Us
-              </a>
-              <a
-                href=""
+                Categories
+              </Link>
+              <Link
+                to="/author"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                FAQ
-              </a>
+                Authors
+              </Link>
             </div>
           </div>
 
           <div className=" mb-8 ">
             <h5 className="font-bold text-xl mb-6">Information</h5>
             <div className="flex flex-col space-y-2 text-sm">
-              <a
-                href=""
+              <Link
+                to="/contact"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                Style Guid
-              </a>
-              <a
-                href=""
+                Contact Us
+              </Link>
+              {/* <Link
+                to="/contact"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                Changelog
-              </a>
-              <a
-                href=""
+                Contact Us
+              </Link>
+              <Link
+                to="/contact"
                 className="hover:translate-x-1 transition-all ease-in-out duration-200"
               >
-                Licenses
-              </a>
+                Contact Us
+              </Link> */}
             </div>
           </div>
-
-         
         </div>
       </div>
 
