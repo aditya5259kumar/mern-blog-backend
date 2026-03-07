@@ -20,10 +20,13 @@ const userController = {
         .find({ author: userId })
         .populate("author", "userName profilePhoto");
 
+      const totalLikes = blogs.reduce((sum, blog) => sum + blog.likesCount, 0);
+
       return helper.success(res, "My profile fetched successfully.", {
         user,
         blogs,
         totalBlogs: blogs.length,
+        totalLikes,
       });
     } catch (error) {
       return helper.error(res, "Something went wrong!", error.message);

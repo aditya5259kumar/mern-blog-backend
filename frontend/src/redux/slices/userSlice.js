@@ -14,6 +14,8 @@ export const myProfile = createAsyncThunk(
         },
       });
 
+      console.log("response.data.data----------",response.data.data)
+
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -56,6 +58,7 @@ const userSlice = createSlice({
     user: null,
     blogs: [],
     totalBlogs: 0,
+    totalLikes:0,
     loading: false,
     error: null,
   },
@@ -72,6 +75,7 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.blogs = action.payload.blogs;
         state.totalBlogs = action.payload.totalBlogs;
+        state.totalLikes = action.payload.totalLikes;
       })
       .addCase(myProfile.rejected, (state, action) => {
         state.loading = false;

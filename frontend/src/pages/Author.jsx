@@ -4,11 +4,12 @@ import { allAuthors } from "../redux/slices/authorSlice";
 import AuthorCard from "../components/AuthorCard";
 import { useDispatch, useSelector } from "react-redux";
 import { searchAuthor } from "../redux/slices/authorSlice";
+import SkeletonCard from "../components/SkeletonCard";
 
 const Authors = () => {
   const [searchText, setSearchText] = useState("");
 
-  const { authors } = useSelector((state) => state.author);
+  const { authors, loading } = useSelector((state) => state.author);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,16 +54,18 @@ const Authors = () => {
           </button>
         </form>
 
-        {authors.length === 0 && (
+        {!loading && authors.length === 0 && (
           <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
             Author with this username does not exist
           </p>
         )}
 
         <div className="mt-15 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-          {authors.map((author) => (
-            <AuthorCard key={author._id} author={author} />
-          ))}
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+            : authors.map((author) => (
+                <AuthorCard key={author._id} author={author} />
+              ))}
         </div>
       </div>
     </div>

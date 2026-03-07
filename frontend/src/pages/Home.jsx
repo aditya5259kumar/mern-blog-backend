@@ -4,11 +4,16 @@ import { readBlogs } from "../redux/slices/blogSlice";
 import BlogCard from "../components/BlogCard";
 import { Link } from "react-router";
 import { HiOutlineCalendar } from "react-icons/hi";
+import SkeletonCard from "../components/SkeletonCard";
 
 const Home = () => {
   const [newsLetterText, setNewsLetterText] = useState("");
 
-  const { blogs } = useSelector((state) => state.blog);
+  const {
+    blogs,
+    loading,
+    error: authError,
+  } = useSelector((state) => state.blog);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -61,56 +66,97 @@ const Home = () => {
         </div>
 
         <div className="mb-12 xl:w-4xl mx-auto group">
-          <Link to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}>
-            <div className="relative overflow-hidden rounded-md md:rounded-lg">
-              <img
-                src={`http://localhost:3000${mainHeroBlog?.images?.[0]}`}
-                alt={mainHeroBlog?.title}
-                className="h-50 md:h-100 group-hover:scale-110 transition-all w-4xl object-cover"
-              />
-              <span className="absolute top-2 shadow-lg left-2 px-3 py-1 text-sm md:text-base rounded-md bg-white text-gray-800">
-                New
-              </span>
-            </div>
-
-            <div className=" p-2 xl:w-4xl ">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-gray-600 md:text-lg font-semibold">
-                  @{mainHeroBlog?.author?.userName}
-                </p>
-
-                <div className="flex items-center space-x-2">
-                  <HiOutlineCalendar className="text-lg" />
-                  <span className="text-gray-600">{formattedDate}</span>
+          <div>
+            {loading ? (
+              <div className="animate-pulse">
+                <div className="h-50 md:h-100 bg-gray-300 rounded-md md:rounded-lg"></div>
+                <div className="p-2 space-y-3">
+                  <div className="h-4 bg-gray-300 w-32 rounded"></div>
+                  <div className="h-6 bg-gray-300 w-3/4 rounded"></div>
                 </div>
               </div>
-              <h4 className="text-start text-lg md:text-2xl font-medium">
-                {mainHeroBlog?.title}
-              </h4>
-            </div>
-          </Link>
+            ) : (
+              mainHeroBlog && (
+                <Link to={token ? `/blog/${mainHeroBlog?._id}` : "/login"}>
+                  <div className="relative overflow-hidden rounded-md md:rounded-lg">
+                    <img
+                      src={`http://localhost:3000${mainHeroBlog?.images?.[0]}`}
+                      alt={mainHeroBlog?.title}
+                      className="h-50 md:h-100 group-hover:scale-110 transition-all w-4xl object-cover"
+                    />
+                    <span className="absolute top-2 shadow-lg left-2 px-3 py-1 text-sm md:text-base rounded-md bg-white text-gray-800">
+                      New
+                    </span>
+                  </div>
+
+                  <div className=" p-2 xl:w-4xl ">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-gray-600 md:text-lg font-semibold">
+                        @{mainHeroBlog?.author?.userName}
+                      </p>
+
+                      <div className="flex items-center space-x-2">
+                        <HiOutlineCalendar className="text-lg" />
+                        <span className="text-gray-600">{formattedDate}</span>
+                      </div>
+                    </div>
+                    <h4 className="text-start text-lg md:text-2xl font-medium">
+                      {mainHeroBlog?.title}
+                    </h4>
+                  </div>
+                </Link>
+              )
+            )}
+          </div>
+          {authError && (
+            <p className="text-sm text-center text-red-700 mb-4">{authError}</p>
+          )}
         </div>
 
         <h5 className="text-3xl font-semibold border-b border-t border-gray-300 mb-12 py-4">
           Trending Blogs
         </h5>
+          <div>
         <div className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
-          {blogs.slice(0, 3).map((item) => (
-            <Link to={token ? `/blog/${item._id}` : "/login"} key={item._id}>
-              <BlogCard item={item} />
-            </Link>
-          ))}
+            {loading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))
+              : blogs.slice(0, 3).map((item) => (
+                  <Link
+                    to={token ? `/blog/${item._id}` : "/login"}
+                    key={item._id}
+                  >
+                    <BlogCard item={item} />
+                  </Link>
+                ))}
+          </div>
+          {authError && (
+            <p className="text-sm text-center text-red-700 mb-4">{authError}</p>
+          )}
         </div>
 
         <h5 className="text-3xl font-semibold border-b border-t border-gray-300 my-12 py-4">
           Latest Blogs
         </h5>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
-          {blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
-            <Link to={token ? `/blog/${item?._id}` : "/login"} key={item._id}>
-              <BlogCard item={item} />
-            </Link>
-          ))}
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+            {loading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))
+              : blogs.slice(blogs.length - 4, blogs.length - 1).map((item) => (
+                  <Link
+                    to={token ? `/blog/${item?._id}` : "/login"}
+                    key={item._id}
+                  >
+                    <BlogCard item={item} />
+                  </Link>
+                ))}
+          </div>
+          {authError && (
+            <p className="text-sm text-center text-red-700 mb-4">{authError}</p>
+          )}
         </div>
 
         <div className=" bg-gray-100 lg:mx-40 lg:py-20 md:py-12 py-8 px-10 md:px-20  rounded-xl mt-14">

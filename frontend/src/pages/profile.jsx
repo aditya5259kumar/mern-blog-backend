@@ -9,7 +9,7 @@ import defaultUser from "../assets/defaultUser.jpg";
 
 const MyProfile = () => {
   const dispatch = useDispatch();
-  const { user, blogs, totalBlogs, loading, error } = useSelector(
+  const { user, blogs, totalBlogs,totalLikes, loading, error } = useSelector(
     (state) => state.user,
   );
 
@@ -71,7 +71,7 @@ const MyProfile = () => {
     data.append("bio", formData.bio);
 
     if (selectedFile) {
-      data.append("pfp", selectedFile); // MUST match upload.single("pfp")
+      data.append("pfp", selectedFile);
     }
 
     dispatch(updateProfile(data));
@@ -181,13 +181,13 @@ const MyProfile = () => {
 
             <p className="text-2xl mt-1 font-medium text-gray-800">
               Published Blogs:
-              <span className="font-bold">{totalBlogs}</span>
+              <span className="mx-2 text-2xl font-bold">{totalBlogs}</span>
             </p>
 
-            {/* <p className="text-sm mt-1 text-gray-500">
-              Total <span className="mx-1 font-medium">2344</span> likes
+            <p className="text-sm mt-1 text-gray-500">
+              Total <span className="mx-1 font-medium">{totalLikes}</span> likes
               <GoHeartFill className="inline ml-1 text-red-600" />
-            </p> */}
+            </p>
 
             <div className="mt-10 flex gap-6 items-center md:justify-start justify-center">
               {!isEditing ? (
@@ -218,29 +218,29 @@ const MyProfile = () => {
             </div>
           </div>
         </div>
+        <div>
+          <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">
+            {user.userName}'s published blogs
+          </h4>
 
-        {blogs.length === 0 && (
-          <div>
-            <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
+          <div className="container mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+            {loading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))
+              : blogs.map((item) => (
+                  <Link to={`/blog/${item._id}`} key={item._id}>
+                    <BlogCard item={item} />
+                  </Link>
+                ))}
+          </div>
+
+          {!loading && blogs.length === 0 && (
+            <p className=" text-gray-400 text-lg text-center pt-8">
               No Published blogs
             </p>
-          </div>
-        )}
-        {blogs.length !== 0 && (
-          <div>
-            <h4 className="border-b text-3xl md:text-4xl border-gray-300 capitalize font-semibold pb-3">
-              {user.userName}
-              's published blogs
-            </h4>
-            <div className="container mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-              {blogs.map((item) => (
-                <Link to={`/blog/${item._id}`} key={item._id}>
-                  <BlogCard item={item} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

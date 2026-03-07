@@ -56,7 +56,7 @@ export const blogDetail = createAsyncThunk(
 
       // console.log("response.data-------", response.data);
 
-      // console.log("response.data.data-------", response.data.data);
+      console.log("response.data.data-------", response.data.data);
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

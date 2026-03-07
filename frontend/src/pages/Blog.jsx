@@ -4,6 +4,7 @@ import { readBlogs } from "../redux/slices/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 import { searchBlog } from "../redux/slices/blogSlice";
+import SkeletonCard from "../components/SkeletonCard";
 
 const Blog = () => {
   const [searchText, setSearchText] = useState("");
@@ -57,23 +58,25 @@ const Blog = () => {
           </button>
         </form>
 
-        {blogs.length === 0 && (
-          <p className="text-gray-400 text-lg text-center border-t border-gray-300 pt-8">
+        {!loading && blogs.length === 0 && (
+          <p className="text-gray-400 mb-4 text-lg text-center border-t border-gray-300 pt-8">
             Blog with this title does not exist!
           </p>
         )}
 
-        {loading ? (
-          <p className="text-center">Loading...</p>
-        ) : (
-          <div className="container  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-12 gap-y-16">
-            {blogs.map((item) => (
-              <Link to={token ? `/blog/${item._id}` : "/login"} key={item._id}>
-                <BlogCard item={item} />
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {loading
+            ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+            : blogs.map((item) => (
+                <Link
+                  to={token ? `/blog/${item._id}` : "/login"}
+                  key={item._id}
+                >
+                  <BlogCard item={item} />
+                </Link>
+              ))}
+        </div>
+
         {authError && (
           <p className="text-sm text-center text-red-700 mb-4">{authError}</p>
         )}

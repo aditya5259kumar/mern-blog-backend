@@ -8,7 +8,7 @@ import { myProfile } from "../redux/slices/userSlice";
 import { logout } from "../redux/slices/authSlice";
 import defaultUser from "../assets/defaultUser.jpg";
 import { toast } from "react-toastify";
-import { TbLogout2 ,TbLogout } from "react-icons/tb";
+import { TbLogout2, TbLogout } from "react-icons/tb";
 import { LuUser } from "react-icons/lu";
 
 const Navbar = () => {
@@ -30,20 +30,16 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
+    if (token ) {
       dispatch(myProfile());
     }
   }, [dispatch, token]);
 
   // console.log(user);
 
-  if (loading) {
-    return <p>loading...</p>;
-  }
-
   function logOutHandler() {
     if (token) {
-      if (!confirm("Are you sure you want to logout?")) return;
+      if (!window.confirm("Are you sure you want to logout?")) return;
       dispatch(logout());
       toast.success("LogOut successfully", { position: "top-center" });
       navigate("/login");
@@ -86,31 +82,41 @@ const Navbar = () => {
                     onClick={handleUserSetting}
                     className="flex items-center gap-1 overflow-hidden"
                   >
-                    <img
-                      src={
-                        user?.profilePhoto
-                          ? `http://localhost:3000${user?.profilePhoto}`
-                          : defaultUser
-                      }
-                      alt=""
-                      className="w-10 h-10 object-cover rounded-full"
-                    />
+                    {loading ? (
+                      <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse"></div>
+                    ) : (
+                      <img
+                        src={
+                          user?.profilePhoto
+                            ? `http://localhost:3000${user?.profilePhoto}`
+                            : defaultUser
+                        }
+                        alt=""
+                        className="w-10 h-10 object-cover rounded-full"
+                      />
+                    )}
+
                     <span className="hidden md:block font-semibold text-gray-800">
-                      @{user?.userName}
+                      {loading ? "Loading..." : `@${user?.userName}`}
                     </span>
                   </button>
 
                   {userSetting && (
-                    <div className="absolute -right-2 top-12 md:-right-6 w-36 bg-gray-50 rounded-lg  shadow-xl z-8">
+                    <div className="absolute -right-2 top-12 md:-right-6 w-36 bg-gray-50 rounded-lg shadow-xl z-10">
                       <Link
-                        to="profile"
-                        className=" cursor-pointer w-full px-4 py-2.5 text-sm font-medium text-zinc-700 transition-all flex items-center justify-between gap-2"
+                        to="/profile"
+                        onClick={() => setUserSetting(false)}
+                        className="w-full px-4 py-2.5 text-sm font-medium text-zinc-700 flex items-center justify-between"
                       >
                         Profile <LuUser className="text-lg" />
                       </Link>
+
                       <button
-                        onClick={logOutHandler}
-                        className="cursor-pointer w-full px-4 py-2.5 text-sm border-b font-medium border border-gray-200 text-red-700 transition-all flex items-center justify-between gap-2"
+                        onClick={() => {
+                          setUserSetting(false);
+                          logOutHandler();
+                        }}
+                        className="w-full px-4 py-2.5 text-sm border-t font-medium border-gray-200 text-red-700 flex items-center justify-between"
                       >
                         LogOut <TbLogout className="text-lg" />
                       </button>
@@ -124,7 +130,7 @@ const Navbar = () => {
                   to="login"
                   className="flex items-center gap-3 text-sm md:text-base border-2 font-medium border-gray-600 px-3 md:py-1.5 py-1.5 rounded-md"
                 >
-                  Login <TbLogout2 className="text-lg"/>
+                  Login <TbLogout2 className="text-lg" />
                 </Link>
               )}
               <Link
@@ -173,7 +179,7 @@ const Navbar = () => {
                   to="login"
                   className="flex items-center gap-3 cursor-pointer border-2 border-gray-800 rounded-md px-3 py-1.5 text-gray-700 font-medium"
                 >
-                  Login <TbLogout2 className="text-lg"/>
+                  Login <TbLogout2 className="text-lg" />
                 </Link>
               )}
               <Link
@@ -188,7 +194,7 @@ const Navbar = () => {
                   onClick={logOutHandler}
                   className="flex items-center gap-3 cursor-pointer text-red-700 font-medium border border-red-700 px-4 py-1.5 rounded-md"
                 >
-                  LogOut <TbLogout  className="text-lg" />
+                  LogOut <TbLogout className="text-lg" />
                 </button>
               )}
             </div>
